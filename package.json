@@ -31,6 +31,7 @@
     "minimist": "^1.2.8",
     "mongodb": "^6.1.0",
     "nanoid": "^5.0.1",
+    "rimraf": "^5.0.5",
     "sharp": "^0.32.6",
     "socket.io": "^4.7.2"
   },
@@ -43,6 +44,7 @@
     "@types/mime": "^3.0.1",
     "@types/minimist": "^1.2.2",
     "@types/node": "^20.6.1",
+    "@types/rimraf": "^4.0.5",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
     "eslint": "^8.49.0",
@@ -50,7 +52,6 @@
     "eslint-plugin-prettier": "^5.0.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
-    "rimraf": "3.0.2",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.7",
     "tsconfig-paths": "^4.2.0",
