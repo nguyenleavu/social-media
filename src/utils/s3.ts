@@ -50,7 +50,7 @@ export const sendFileToS3 = async (res: Response, filepath: string) => {
       Bucket: process.env.S3_BUCKET_NAME as string,
       Key: filepath
     })
-    ;((await data).Body as any).pipe(res)
+    ;((data as any).Body as any).pipe(res)
   } catch (error) {
     res.status(HTTP_STATUS.NOT_FOUND).send('Not found')
   }

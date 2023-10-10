@@ -28,7 +28,7 @@ class Queue {
   }
   async enqueue(item: string) {
     this.items.push(item)
-    const idName = getNameFromFullName(item.split('/').pop() as string)
+    const idName = getNameFromFullName(item.split(`\\`).pop() as string)
     await databaseServices.videoStatus.insertOne(
       new VideoStatus({
         name: idName,
@@ -42,7 +42,8 @@ class Queue {
     if (this.items.length > 0) {
       this.encoding = true
       const videoPath = this.items[0]
-      const idName = getNameFromFullName(videoPath.split('/').pop() as string)
+      const idName = getNameFromFullName(videoPath.split('\\').pop() as string)
+
       await databaseServices.videoStatus.updateOne(
         { name: idName },
         {
@@ -50,22 +51,20 @@ class Queue {
             status: EncodingStatus.Processing
           },
           $currentDate: {
-            created_at: true,
             updated_at: true
           }
         }
       )
-
       try {
-        await encodeHLSWithMultipleVideoStreams(videoPath)
+        encodeHLSWithMultipleVideoStreams(videoPath)
         this.items.shift()
         const files = getFiles(path.resolve(UPLOAD_VIDEO_DIR, idName))
-        await Promise.all(
+        Promise.all(
           map(files, (filepath) => {
-            const filename = 'video-hls' + filepath.replace(path.resolve(UPLOAD_VIDEO_DIR), '')
+            const fileName = 'video-hls/' + filepath.replace(path.resolve(UPLOAD_VIDEO_DIR), '').replace('\\', '')
             return uploadFileToS3({
               filePath: filepath,
-              fileName: filename,
+              fileName,
               contentType: mime.getType(filepath) as string
             })
           })

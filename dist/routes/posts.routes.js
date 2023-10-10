@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const posts_controller_1 = require("../controllers/posts.controller");
+const posts_middlewares_1 = require("../middlewares/posts.middlewares");
+const users_middlewares_1 = require("../middlewares/users.middlewares");
+const handlers_1 = require("../utils/handlers");
+const express_1 = require("express");
+const postsRouter = (0, express_1.Router)();
+postsRouter.post('/', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, posts_middlewares_1.createPostValidator, (0, handlers_1.wrapRequestHandler)(posts_controller_1.createPostController));
+postsRouter.get('/:post_id', posts_middlewares_1.postIdValidator, (0, users_middlewares_1.isUserLoggedInValidator)(users_middlewares_1.accessTokenValidator), (0, users_middlewares_1.isUserLoggedInValidator)(users_middlewares_1.verifiedUserValidator), posts_middlewares_1.audienceValidator, (0, handlers_1.wrapRequestHandler)(posts_controller_1.getPostController));
+postsRouter.get('/:post_id/children', posts_middlewares_1.postIdValidator, posts_middlewares_1.paginationValidator, posts_middlewares_1.getPostChildrenValidator, (0, users_middlewares_1.isUserLoggedInValidator)(users_middlewares_1.accessTokenValidator), (0, users_middlewares_1.isUserLoggedInValidator)(users_middlewares_1.verifiedUserValidator), posts_middlewares_1.audienceValidator, (0, handlers_1.wrapRequestHandler)(posts_controller_1.getPostChildrenController));
+postsRouter.get('/', posts_middlewares_1.paginationValidator, users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, (0, handlers_1.wrapRequestHandler)(posts_controller_1.getNewFeedsController));
+exports.default = postsRouter;
