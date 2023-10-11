@@ -11,6 +11,6 @@ const staticRouter = Router()
 staticRouter.get('/image/:name', serverImageController)
 staticRouter.get('/video/:name', serverVideoStreamController)
 staticRouter.get('/video-hls/:id/master.m3u8', serverM3U8controller)
-staticRouter.get('/video-hls/:id/:v?:segment', serverSegmentController)
+staticRouter.get('/video-hls/:id/:v/:segment', serverSegmentController)
 
 export default staticRouter

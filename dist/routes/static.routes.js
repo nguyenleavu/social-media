@@ -6,5 +6,5 @@ const staticRouter = (0, express_1.Router)();
 staticRouter.get('/image/:name', medias_controllers_1.serverImageController);
 staticRouter.get('/video/:name', medias_controllers_1.serverVideoStreamController);
 staticRouter.get('/video-hls/:id/master.m3u8', medias_controllers_1.serverM3U8controller);
-staticRouter.get('/video-hls/:id/:v?:segment', medias_controllers_1.serverSegmentController);
+staticRouter.get('/video-hls/:id/:v/:segment', medias_controllers_1.serverSegmentController);
 exports.default = staticRouter;

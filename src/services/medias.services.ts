@@ -43,7 +43,6 @@ class Queue {
       this.encoding = true
       const videoPath = this.items[0]
       const idName = getNameFromFullName(videoPath.split('\\').pop() as string)
-
       await databaseServices.videoStatus.updateOne(
         { name: idName },
         {
@@ -56,10 +55,10 @@ class Queue {
         }
       )
       try {
-        encodeHLSWithMultipleVideoStreams(videoPath)
+        await encodeHLSWithMultipleVideoStreams(videoPath)
         this.items.shift()
         const files = getFiles(path.resolve(UPLOAD_VIDEO_DIR, idName))
-        Promise.all(
+        await Promise.all(
           map(files, (filepath) => {
             const fileName = 'video-hls/' + filepath.replace(path.resolve(UPLOAD_VIDEO_DIR), '').replace('\\', '')
             return uploadFileToS3({

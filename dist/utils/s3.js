@@ -38,7 +38,7 @@ const uploadFileToS3 = ({ fileName, filePath, contentType }) => {
 exports.uploadFileToS3 = uploadFileToS3;
 const sendFileToS3 = async (res, filepath) => {
     try {
-        const data = s3.getObject({
+        const data = await s3.getObject({
             Bucket: process.env.S3_BUCKET_NAME,
             Key: filepath
         });

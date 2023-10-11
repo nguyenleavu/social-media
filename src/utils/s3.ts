@@ -4,7 +4,6 @@ import { Upload } from '@aws-sdk/lib-storage'
 import { config } from 'dotenv'
 import { Response } from 'express'
 import fs from 'fs'
-import path from 'path'
 
 config()
 
@@ -46,11 +45,11 @@ export const uploadFileToS3 = ({
 
 export const sendFileToS3 = async (res: Response, filepath: string) => {
   try {
-    const data = s3.getObject({
+    const data = await s3.getObject({
       Bucket: process.env.S3_BUCKET_NAME as string,
       Key: filepath
     })
-    ;((data as any).Body as any).pipe(res)
+    ;(data.Body as any).pipe(res)
   } catch (error) {
     res.status(HTTP_STATUS.NOT_FOUND).send('Not found')
   }

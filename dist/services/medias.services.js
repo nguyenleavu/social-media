@@ -51,10 +51,10 @@ class Queue {
                 }
             });
             try {
-                (0, video_1.encodeHLSWithMultipleVideoStreams)(videoPath);
+                await (0, video_1.encodeHLSWithMultipleVideoStreams)(videoPath);
                 this.items.shift();
                 const files = (0, file_1.getFiles)(path_1.default.resolve(dir_1.UPLOAD_VIDEO_DIR, idName));
-                Promise.all((0, lodash_1.map)(files, (filepath) => {
+                await Promise.all((0, lodash_1.map)(files, (filepath) => {
                     const fileName = 'video-hls/' + filepath.replace(path_1.default.resolve(dir_1.UPLOAD_VIDEO_DIR), '').replace('\\', '');
                     return (0, s3_1.uploadFileToS3)({
                         filePath: filepath,
