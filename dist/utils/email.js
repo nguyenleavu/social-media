@@ -65,6 +65,6 @@ const sendForgotPasswordEmail = (toAddress, forgot_password_token, template = ve
         .replace('{{title}}', 'FORGOT PASSWORD')
         .replace('{{content}}', 'Click button below to verify email')
         .replace('{{button}}', 'Reset password')
-        .replace('{{link}}', `${process.env.CLIENT_URL}/reset-password?token=${forgot_password_token}`));
+        .replace('{{link}}', `${process.env.CLIENT_URL}/verify-forgot-password?token=${forgot_password_token}`));
 };
 exports.sendForgotPasswordEmail = sendForgotPasswordEmail;
