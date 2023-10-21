@@ -51,8 +51,8 @@ export const registerControllers = async (req: Request<ParamsDictionary, any, Re
 }
 
 export const logoutController = async (req: Request<ParamsDictionary, any, LogoutReqBody>, res: Response) => {
-  const { access_token } = req.body
-  const data = await usersService.logout(access_token)
+  const { user_id } = req.decode_authorization as TokenPayload
+  const data = await usersService.logout(user_id)
   return res.json(data)
 }
 

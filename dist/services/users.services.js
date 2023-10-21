@@ -191,8 +191,8 @@ class UsersService {
             return { ...data, newUser: 1, verify: enums_1.UserVerifyStatus.Unverified };
         }
     }
-    async logout(access_token) {
-        await database_services_1.default.refreshTokens.deleteOne({ token: access_token });
+    async logout(refresh_token) {
+        await database_services_1.default.refreshTokens.deleteOne({ token: refresh_token });
         return {
             message: messages_1.USER_MESSAGES.LOGOUT_SUCCESS
         };

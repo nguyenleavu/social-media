@@ -1,4 +1,4 @@
-import { UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_DIR, UPLOAD_VIDEO_TEMP_DIR } from '@/constants/dir'
+import { UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_DIR } from '@/constants/dir'
 import { Request } from 'express'
 import formidable, { File } from 'formidable'
 import fs from 'fs'
@@ -16,12 +16,11 @@ export const initFolder = () => {
 }
 
 export const handleUploadImage = (req: Request) => {
-  const form = formidable({
+  const form = new formidable.IncomingForm({
     uploadDir: UPLOAD_IMAGE_TEMP_DIR,
     maxFiles: 10,
+    maxFileSize: 5000 * 1024 * 1024,
     keepExtensions: true,
-    maxFileSize: 3000 * 1024, //3000 KB
-    maxTotalFileSize: 3000 * 1024 * 4,
     filter: ({ name, originalFilename, mimetype }) => {
       const isValid = name === 'image' && Boolean(mimetype?.includes('image/'))
 
@@ -51,7 +50,7 @@ export const handleUploadVideo = (req: Request) => {
   const form = formidable({
     uploadDir: UPLOAD_VIDEO_DIR,
     maxFiles: 1,
-    maxFileSize: 50 * 1024 * 1024,
+    maxFileSize: 200 * 1024 * 1024,
     filter: ({ name, originalFilename, mimetype }) => {
       const isValid = name === 'video' && Boolean(mimetype?.includes('video/') || mimetype?.includes('quicktime'))
 
@@ -110,7 +109,7 @@ export const handleUploadVideoHLS = async (req: Request) => {
   const form = formidable({
     uploadDir: folderPath,
     maxFiles: 1,
-    maxFileSize: 50 * 1024 * 1024,
+    maxFileSize: 200 * 1024 * 1024,
     filter: ({ name, originalFilename, mimetype }) => {
       const isValid = name === 'video' && Boolean(mimetype?.includes('video/') || mimetype?.includes('quicktime'))
 

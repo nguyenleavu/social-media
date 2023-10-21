@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 4000
 initFolder()
 app.use(helmet())
 const corsOptions: CorsOptions = {
-  origin: isProduction ? process.env.CLIENT_URL : '*'
+  origin: [process.env.CLIENT_URL as string]
 }
 app.use(cors(corsOptions))
 app.use(express.json())
