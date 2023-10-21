@@ -15,7 +15,7 @@ export interface RegisterReqBody {
 }
 
 export interface LogoutReqBody {
-  refresh_token: string
+  access_token: string
 }
 
 export interface RefreshTokenReqBody {
