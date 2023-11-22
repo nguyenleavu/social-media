@@ -24,9 +24,8 @@ const handleUploadImage = (req) => {
     const form = (0, formidable_1.default)({
         uploadDir: dir_1.UPLOAD_IMAGE_TEMP_DIR,
         maxFiles: 10,
+        maxFileSize: 200 * 1024 * 1024,
         keepExtensions: true,
-        maxFileSize: 3000 * 1024,
-        maxTotalFileSize: 3000 * 1024 * 4,
         filter: ({ name, originalFilename, mimetype }) => {
             const isValid = name === 'image' && Boolean(mimetype?.includes('image/'));
             if (!isValid) {
@@ -52,7 +51,7 @@ const handleUploadVideo = (req) => {
     const form = (0, formidable_1.default)({
         uploadDir: dir_1.UPLOAD_VIDEO_DIR,
         maxFiles: 1,
-        maxFileSize: 50 * 1024 * 1024,
+        maxFileSize: 200 * 1024 * 1024,
         filter: ({ name, originalFilename, mimetype }) => {
             const isValid = name === 'video' && Boolean(mimetype?.includes('video/') || mimetype?.includes('quicktime'));
             if (!isValid) {
@@ -104,7 +103,7 @@ const handleUploadVideoHLS = async (req) => {
     const form = (0, formidable_1.default)({
         uploadDir: folderPath,
         maxFiles: 1,
-        maxFileSize: 50 * 1024 * 1024,
+        maxFileSize: 200 * 1024 * 1024,
         filter: ({ name, originalFilename, mimetype }) => {
             const isValid = name === 'video' && Boolean(mimetype?.includes('video/') || mimetype?.includes('quicktime'));
             if (!isValid) {

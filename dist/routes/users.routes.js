@@ -9,7 +9,7 @@ const usersRouter = (0, express_1.Router)();
 usersRouter.post('/login', users_middlewares_1.loginValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.loginControllers));
 usersRouter.get('/oauth/google', (0, handlers_1.wrapRequestHandler)(users_controllers_1.oauthController));
 usersRouter.post('/register', users_middlewares_1.registerValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.registerControllers));
-usersRouter.post('/logout', users_middlewares_1.accessTokenValidator, users_middlewares_1.refreshTokenValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.logoutController));
+usersRouter.post('/logout', users_middlewares_1.accessTokenValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.logoutController));
 usersRouter.post('/refresh-token', users_middlewares_1.refreshTokenValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.refreshTokenController));
 usersRouter.post('/email-verify', users_middlewares_1.emailVerifyTokenValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.emailVerifyController));
 usersRouter.post('/resend-email-verify', users_middlewares_1.accessTokenValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.resendEmailVerifyController));

@@ -39,8 +39,8 @@ const registerControllers = async (req, res) => {
 };
 exports.registerControllers = registerControllers;
 const logoutController = async (req, res) => {
-    const { refresh_token } = req.body;
-    const data = await users_services_1.default.logout(refresh_token);
+    const { user_id } = req.decode_authorization;
+    const data = await users_services_1.default.logout(user_id);
     return res.json(data);
 };
 exports.logoutController = logoutController;

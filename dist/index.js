@@ -20,7 +20,6 @@ const users_routes_1 = __importDefault(require("./routes/users.routes"));
 const file_1 = require("./utils/file");
 const socket_1 = __importDefault(require("./utils/socket"));
 const helmet_1 = __importDefault(require("helmet"));
-const config_1 = require("./constants/config");
 (0, dotenv_1.config)();
 database_services_1.default.connect().then(() => {
     database_services_1.default.indexUser();
@@ -36,7 +35,7 @@ const PORT = process.env.PORT || 4000;
 (0, file_1.initFolder)();
 app.use((0, helmet_1.default)());
 const corsOptions = {
-    origin: config_1.isProduction ? process.env.CLIENT_URL : '*'
+    origin: [process.env.CLIENT_URL]
 };
 app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
