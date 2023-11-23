@@ -32,11 +32,13 @@ const PORT = process.env.PORT || 4000
 
 // create folder
 initFolder()
+
+app.use(
+  cors({
+    origin: '*'
+  })
+)
 app.use(helmet())
-const corsOptions: CorsOptions = {
-  origin: [process.env.CLIENT_URL as string]
-}
-app.use(cors(corsOptions))
 app.use(express.json())
 
 // Router

@@ -33,11 +33,10 @@ const httpServer = (0, http_1.createServer)(app);
 const PORT = process.env.PORT || 4000;
 // create folder
 (0, file_1.initFolder)();
+app.use((0, cors_1.default)({
+    origin: '*'
+}));
 app.use((0, helmet_1.default)());
-const corsOptions = {
-    origin: [process.env.CLIENT_URL]
-};
-app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 // Router
 app.use('/users', users_routes_1.default);
