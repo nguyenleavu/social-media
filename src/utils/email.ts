@@ -7,10 +7,10 @@ config()
 
 // Create SES service object.
 const sesClient = new SESClient({
-  region: process.env.AWS_REGION,
+  region: process.env.NODE_AWS_REGION,
   credentials: {
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string
+    secretAccessKey: process.env.NODE_AWS_SECRET_ACCESS_KEY as string,
+    accessKeyId: process.env.NODE_AWS_ACCESS_KEY_ID as string
   }
 })
 
