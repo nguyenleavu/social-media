@@ -15,7 +15,6 @@ import usersRouter from './routes/users.routes'
 import { initFolder } from './utils/file'
 import initSocket from './utils/socket'
 import helmet from 'helmet'
-import { isProduction } from './constants/config'
 
 config()
 

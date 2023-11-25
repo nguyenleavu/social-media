@@ -3,14 +3,14 @@
     "module": "NodeNext", // Quy định output module được sử dụng
     "moduleResolution": "NodeNext",
     "forceConsistentCasingInFileNames": false,
-    "target": "ES2022", // Target output cho code
+    "target": "ES2015", // Target output cho code
     "outDir": "public", // Đường dẫn output cho thư mục build
     "esModuleInterop": true,
     "strict": true /* Enable all strict type-checking options. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "baseUrl": ".", // Đường dẫn base cho các import
     "paths": {
-      "@/*": [
+      "@*": [
         "src/*"
       ] // Đường dẫn tương đối cho các import (alias)
     }
@@ -24,7 +24,6 @@
     "src/type.d.ts"
   ], // Các file dùng để defined global type cho dự án
   "include": [
-    "./api/*.ts",
-    "src/**/*"
+    "src/**/*.ts"
   ] // Đường dẫn include cho các file cần build
 }

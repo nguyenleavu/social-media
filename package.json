@@ -3,13 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "engines": {
-    "node": ">=14.20.1"
-  },
   "scripts": {
     "rimraf": "./node_modules/rimraf/bin.js",
     "dev": "yarn nodemon --development",
-    "build": "rimraf ./public && tsc && tsc-alias && npm i",
+    "build": "rimraf ./public && tsc && tsc-alias",
     "start": "node public/index.js --production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -48,7 +45,6 @@
     "@types/minimist": "^1.2.2",
     "@types/node": "^20.6.1",
     "@types/qs": "^6.9.8",
-    "@types/rimraf": "^4.0.5",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
     "eslint": "^8.49.0",
