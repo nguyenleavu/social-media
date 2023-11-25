@@ -9,8 +9,8 @@
   "scripts": {
     "rimraf": "./node_modules/rimraf/bin.js",
     "dev": "yarn nodemon --development",
-    "build": "rimraf ./dist && tsc && tsc-alias",
-    "start": "node dist/index.js --production",
+    "build": "rimraf ./public && tsc && tsc-alias && npm i",
+    "start": "node public/index.js --production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check .",
