@@ -32,7 +32,7 @@ import {
   verifiedUserValidator,
   verifyForgotPasswordValidator
 } from '@/middlewares/users.middlewares'
-import { UpdateMeReqBody } from '@/models/requests/users.requests'
+import { UpdateMeReqBody } from '@/models/requests/Users.requests'
 import { wrapRequestHandler } from '@/utils/handlers'
 import { Router } from 'express'
 

@@ -2,7 +2,7 @@ import { ParamsDictionary } from 'express-serve-static-core'
 import { Request, Response } from 'express'
 import { PostReqBody } from '@/models/requests/Posts.requests'
 import postsService from '@/services/posts.services'
-import { TokenPayload } from '@/models/requests/users.requests'
+import { TokenPayload } from '@/models/requests/Users.requests'
 import { POST_MESSAGE } from '@/constants/messages'
 import { PostType } from '@/constants/enums'
 

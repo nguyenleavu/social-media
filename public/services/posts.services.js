@@ -226,14 +226,6 @@ class PostsService {
                     }
                 },
                 {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'user_id',
-                        foreignField: '_id',
-                        as: 'user'
-                    }
-                },
-                {
                     $match: {
                         $or: [
                             {
@@ -259,6 +251,14 @@ class PostsService {
                 },
                 {
                     $limit: limit
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'user_id',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
                 },
                 {
                     $lookup: {

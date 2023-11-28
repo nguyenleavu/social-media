@@ -12,7 +12,7 @@ const crypto_1 = require("./crypto");
 const Follower_schema_1 = __importDefault(require("../models/schemas/Follower.schema"));
 const posts_services_1 = __importDefault(require("../services/posts.services"));
 const PASSWORD = '123456789aA@';
-const MY_ID = new mongodb_1.ObjectId('651680e0f348fda0b9288712');
+const MY_ID = '656d71cb18d2267bb50e6c60';
 const USER_COUNT = 1000;
 const createRandomUser = () => {
     const user = {
@@ -24,14 +24,37 @@ const createRandomUser = () => {
     };
     return user;
 };
+const medias = [
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/157a2ba6c979f0a987da6a001.jpg',
+        type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/aa522d6ff12de0392e479ec00.jpg',
+        type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/aa522d6ff12de0392e479ec01.jpg',
+        type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/aa522d6ff12de0392e479ec02.jpg',
+        type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/aa522d6ff12de0392e479ec03.jpg',
+        type: 0
+    }
+];
 const createRandomPost = () => {
+    const number = Math.floor(Math.random() * 5);
     const posts = {
         type: enums_1.PostType.Post,
         audience: enums_1.PostAudience.Everyone,
-        content: faker_1.faker.lorem.paragraph({ min: 20, max: 160 }),
+        content: faker_1.faker.lorem.paragraph({ min: 20, max: 40 }),
         hashtags: [],
         mentions: [],
-        medias: [],
+        medias: [medias[number]],
         parent_id: null
     };
     return posts;

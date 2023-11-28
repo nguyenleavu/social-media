@@ -14,7 +14,7 @@ import {
   ResetPasswordReqBody,
   TokenPayload,
   UpdateMeReqBody
-} from '@/models/requests/users.requests'
+} from '@/models/requests/Users.requests'
 import User from '@/models/schemas/User.schema'
 import databaseServices from '@/services/database.services'
 import usersService from '@/services/users.services'

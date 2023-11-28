@@ -1,7 +1,7 @@
-import databaseServices from '@/services/database.services'
-import cors, { CorsOptions } from 'cors'
+import cors from 'cors'
 import { config } from 'dotenv'
 import express from 'express'
+import helmet from 'helmet'
 import { createServer } from 'http'
 import { defaultErrorHandler } from './middlewares/errors.middlewares'
 import bookmarksRouter from './routes/bookmarks.routes'
@@ -12,9 +12,9 @@ import postsRouter from './routes/posts.routes'
 import searchRouter from './routes/search.routes'
 import staticRouter from './routes/static.routes'
 import usersRouter from './routes/users.routes'
+import databaseServices from './services/database.services'
 import { initFolder } from './utils/file'
 import initSocket from './utils/socket'
-import helmet from 'helmet'
 
 config()
 

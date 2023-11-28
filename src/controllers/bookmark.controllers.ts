@@ -1,6 +1,6 @@
 import { BOOKMARK_MESSAGE } from '@/constants/messages'
 import { BookmarkReqParams } from '@/models/requests/Bookmarks.request'
-import { TokenPayload } from '@/models/requests/users.requests'
+import { TokenPayload } from '@/models/requests/Users.requests'
 import bookmarkService from '@/services/bookmarks.services'
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'

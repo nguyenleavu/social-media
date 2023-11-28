@@ -1,4 +1,4 @@
-import { TokenPayload } from '@/models/requests/users.requests'
+import { TokenPayload } from '@/models/requests/Users.requests'
 import { config } from 'dotenv'
 import jwt, { SignOptions } from 'jsonwebtoken'
 config()

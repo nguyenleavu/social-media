@@ -6,7 +6,7 @@ import { ErrorWithStatus } from '@/models/Errors'
 import { USER_MESSAGES } from '@/constants/messages'
 import { UserVerifyStatus } from '@/constants/enums'
 import HTTP_STATUS from '@/constants/httpStatus'
-import { TokenPayload } from '@/models/requests/users.requests'
+import { TokenPayload } from '@/models/requests/Users.requests'
 import Conversation from '@/models/schemas/Conversation.schema'
 import { Server as ServerHttp } from 'http'
 

@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_services_1 = __importDefault(require("./services/database.services"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = require("dotenv");
 const express_1 = __importDefault(require("express"));
+const helmet_1 = __importDefault(require("helmet"));
 const http_1 = require("http");
 const errors_middlewares_1 = require("./middlewares/errors.middlewares");
 const bookmarks_routes_1 = __importDefault(require("./routes/bookmarks.routes"));
@@ -17,9 +17,9 @@ const posts_routes_1 = __importDefault(require("./routes/posts.routes"));
 const search_routes_1 = __importDefault(require("./routes/search.routes"));
 const static_routes_1 = __importDefault(require("./routes/static.routes"));
 const users_routes_1 = __importDefault(require("./routes/users.routes"));
+const database_services_1 = __importDefault(require("./services/database.services"));
 const file_1 = require("./utils/file");
 const socket_1 = __importDefault(require("./utils/socket"));
-const helmet_1 = __importDefault(require("helmet"));
 (0, dotenv_1.config)();
 database_services_1.default.connect().then(() => {
     database_services_1.default.indexUser();
