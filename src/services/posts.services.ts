@@ -4,7 +4,7 @@ import databaseServices from './database.services'
 import { ObjectId, WithId } from 'mongodb'
 import { map } from 'lodash'
 import Hashtag from '@/models/schemas/Hashtag.schema'
-import { PostType } from '@/constants/enums'
+import { PostAudience, PostType } from '@/constants/enums'
 
 class PostsService {
   async checkAndCreateHashtags(hashtags: string[]) {
@@ -262,15 +262,28 @@ class PostsService {
             }
           },
           {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user'
+            }
+          },
+          {
             $match: {
               $or: [
                 {
-                  audience: 0
+                  audience: PostAudience.Everyone
                 },
                 {
                   $and: [
                     {
-                      audience: 1
+                      audience: PostAudience.PostCircle
                     },
                     {
                       'user.post_circle': {
@@ -288,14 +301,7 @@ class PostsService {
           {
             $limit: limit
           },
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'user_id',
-              foreignField: '_id',
-              as: 'user'
-            }
-          },
+
           {
             $lookup: {
               from: 'hashtags',
@@ -346,6 +352,14 @@ class PostsService {
           },
           {
             $lookup: {
+              from: 'likes',
+              localField: '_id',
+              foreignField: 'postId',
+              as: 'liked'
+            }
+          },
+          {
+            $lookup: {
               from: 'posts',
               localField: '_id',
               foreignField: 'parent_id',
@@ -359,6 +373,9 @@ class PostsService {
               },
               likes: {
                 $size: '$likes'
+              },
+              isLiked: {
+                $in: [user_id_obj, '$likes.user_id']
               },
               comment_count: {
                 $size: {
@@ -405,6 +422,11 @@ class PostsService {
                 post_circle: 0,
                 date_of_birth: 0
               }
+            }
+          },
+          {
+            $sort: {
+              created_at: -1
             }
           }
         ])

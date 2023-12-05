@@ -12,7 +12,7 @@ const crypto_1 = require("./crypto");
 const Follower_schema_1 = __importDefault(require("../models/schemas/Follower.schema"));
 const posts_services_1 = __importDefault(require("../services/posts.services"));
 const PASSWORD = '123456789aA@';
-const MY_ID = '656d71cb18d2267bb50e6c60';
+const MY_ID = '65702cd5902ca0f0747f84d5';
 const USER_COUNT = 1000;
 const createRandomUser = () => {
     const user = {
@@ -65,6 +65,9 @@ const insertMultipleUsers = async (users) => {
         const user_id = new mongodb_1.ObjectId();
         await database_services_1.default.users.insertOne(new User_schema_1.default({
             ...user,
+            _id: user_id,
+            avatar: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/16f5ccab09a4d9bc58768b400.jpg',
+            post_circle: [user_id],
             username: `user${user_id.toString()}`,
             password: (0, crypto_1.hasPassword)(user.password),
             date_of_birth: new Date(user.date_of_birth),
@@ -75,10 +78,16 @@ const insertMultipleUsers = async (users) => {
     return result;
 };
 const followMultipleUsers = async (user_id, followed_user_ids) => {
-    const result = await Promise.all(followed_user_ids.map((followed_user_id) => database_services_1.default.followers.insertOne(new Follower_schema_1.default({
-        user_id,
-        followed_user_id: new mongodb_1.ObjectId(followed_user_id)
-    }))));
+    await Promise.all(followed_user_ids.map((followed_user_id) => {
+        database_services_1.default.followers.insertOne(new Follower_schema_1.default({
+            user_id: new mongodb_1.ObjectId(user_id),
+            followed_user_id: new mongodb_1.ObjectId(followed_user_id)
+        }));
+        database_services_1.default.followers.insertOne(new Follower_schema_1.default({
+            user_id: new mongodb_1.ObjectId(followed_user_id),
+            followed_user_id: new mongodb_1.ObjectId(user_id)
+        }));
+    }));
 };
 const insertMultiplePost = async (ids) => {
     let count = 0;
@@ -93,6 +102,6 @@ const insertMultiplePost = async (ids) => {
     return result;
 };
 insertMultipleUsers(users).then((ids) => {
-    followMultipleUsers(new mongodb_1.ObjectId(MY_ID), ids);
+    followMultipleUsers(MY_ID, ids);
     insertMultiplePost(ids);
 });

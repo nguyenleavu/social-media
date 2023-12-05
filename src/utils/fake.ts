@@ -10,7 +10,7 @@ import Follower from '@/models/schemas/Follower.schema'
 import postsService from '@/services/posts.services'
 
 const PASSWORD = '123456789aA@'
-const MY_ID = '656d71cb18d2267bb50e6c60'
+const MY_ID = '65702cd5902ca0f0747f84d5'
 const USER_COUNT = 1000
 
 const createRandomUser = () => {
@@ -71,6 +71,10 @@ const insertMultipleUsers = async (users: RegisterReqBody[]) => {
       await databaseServices.users.insertOne(
         new User({
           ...user,
+          _id: user_id,
+          avatar:
+            'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/16f5ccab09a4d9bc58768b400.jpg',
+          post_circle: [user_id],
           username: `user${user_id.toString()}`,
           password: hasPassword(user.password),
           date_of_birth: new Date(user.date_of_birth),
@@ -83,16 +87,22 @@ const insertMultipleUsers = async (users: RegisterReqBody[]) => {
   return result
 }
 
-const followMultipleUsers = async (user_id: ObjectId, followed_user_ids: ObjectId[]) => {
-  const result = await Promise.all(
-    followed_user_ids.map((followed_user_id) =>
+const followMultipleUsers = async (user_id: string, followed_user_ids: ObjectId[]) => {
+  await Promise.all(
+    followed_user_ids.map((followed_user_id) => {
       databaseServices.followers.insertOne(
         new Follower({
-          user_id,
+          user_id: new ObjectId(user_id),
           followed_user_id: new ObjectId(followed_user_id)
         })
       )
-    )
+      databaseServices.followers.insertOne(
+        new Follower({
+          user_id: new ObjectId(followed_user_id),
+          followed_user_id: new ObjectId(user_id)
+        })
+      )
+    })
   )
 }
 
@@ -112,6 +122,6 @@ const insertMultiplePost = async (ids: ObjectId[]) => {
 }
 
 insertMultipleUsers(users).then((ids) => {
-  followMultipleUsers(new ObjectId(MY_ID), ids)
+  followMultipleUsers(MY_ID, ids)
   insertMultiplePost(ids)
 })
