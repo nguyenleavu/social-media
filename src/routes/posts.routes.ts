@@ -27,6 +27,7 @@ postsRouter.post(
 
 postsRouter.get(
   '/:post_id',
+  accessTokenValidator,
   postIdValidator,
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),

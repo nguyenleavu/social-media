@@ -3,6 +3,7 @@ import HTTP_STATUS from '@/constants/httpStatus'
 import { POST_MESSAGE, USER_MESSAGES } from '@/constants/messages'
 import { ErrorWithStatus } from '@/models/Errors'
 import { Media } from '@/models/Other'
+import { TokenPayload } from '@/models/requests/Users.requests'
 import Post from '@/models/schemas/Post.schema'
 import databaseServices from '@/services/database.services'
 import { numberEnumToArray } from '@/utils/common'
@@ -130,7 +131,7 @@ export const postIdValidator = validate(
                 status: HTTP_STATUS.BAD_REQUEST
               })
             }
-
+            const { user_id } = req.decode_authorization as TokenPayload
             const [post] = await databaseServices.posts
               .aggregate<Post>([
                 {
@@ -201,6 +202,9 @@ export const postIdValidator = validate(
                     },
                     likes: {
                       $size: '$likes'
+                    },
+                    isLiked: {
+                      $in: [user_id, '$likes.user_id']
                     },
                     comment_count: {
                       $size: {

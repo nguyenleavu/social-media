@@ -149,6 +149,9 @@ class PostsService {
             likes: {
               $size: '$likes'
             },
+            isLiked: {
+              $in: [user_id, '$likes.user_id']
+            },
             comment_count: {
               $size: {
                 $filter: {
@@ -348,14 +351,6 @@ class PostsService {
               localField: '_id',
               foreignField: 'post_id',
               as: 'likes'
-            }
-          },
-          {
-            $lookup: {
-              from: 'likes',
-              localField: '_id',
-              foreignField: 'postId',
-              as: 'liked'
             }
           },
           {
