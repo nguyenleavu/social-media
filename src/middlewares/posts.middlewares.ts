@@ -131,12 +131,24 @@ export const postIdValidator = validate(
                 status: HTTP_STATUS.BAD_REQUEST
               })
             }
-            const { user_id } = req.decode_authorization as TokenPayload
             const [post] = await databaseServices.posts
               .aggregate<Post>([
                 {
                   $match: {
                     _id: new ObjectId(value)
+                  }
+                },
+                {
+                  $lookup: {
+                    from: 'users',
+                    localField: 'user_id',
+                    foreignField: '_id',
+                    as: 'user'
+                  }
+                },
+                {
+                  $unwind: {
+                    path: '$user'
                   }
                 },
                 {
@@ -204,7 +216,7 @@ export const postIdValidator = validate(
                       $size: '$likes'
                     },
                     isLiked: {
-                      $in: [user_id, '$likes.user_id']
+                      $in: ['$user._id', '$likes.user_id']
                     },
                     comment_count: {
                       $size: {

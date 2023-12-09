@@ -303,8 +303,162 @@ class UsersService {
         });
         return user;
     }
-    async getProfile(username) {
-        const user = await database_services_1.default.users.findOne({ username });
+    async getProfile(username, user_id) {
+        const [user] = await database_services_1.default.users
+            .aggregate([
+            {
+                $match: {
+                    username
+                }
+            },
+            {
+                $lookup: {
+                    from: 'posts',
+                    localField: '_id',
+                    foreignField: 'user_id',
+                    as: 'posts',
+                    pipeline: [
+                        {
+                            $match: {
+                                type: { $in: [enums_1.PostType.Post, enums_1.PostType.QuotePost, enums_1.PostType.Repost] }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'posts',
+                                localField: '_id',
+                                foreignField: 'parent_id',
+                                as: 'posts_children'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                comment_count: {
+                                    $size: {
+                                        $filter: {
+                                            input: '$posts_children',
+                                            as: 'item',
+                                            cond: {
+                                                $eq: ['$$item.type', enums_1.PostType.Comment]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $project: {
+                                posts_children: 0
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: 'bookmarks',
+                    localField: '_id',
+                    foreignField: 'user_id',
+                    as: 'bookmarks'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'posts',
+                    localField: 'bookmarks.post_id',
+                    foreignField: '_id',
+                    as: 'bookmarks',
+                    pipeline: [
+                        {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'user_id',
+                                foreignField: '_id',
+                                as: 'user'
+                            }
+                        },
+                        {
+                            $unwind: {
+                                path: '$user'
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'posts',
+                                localField: '_id',
+                                foreignField: 'parent_id',
+                                as: 'posts_children'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                comment_count: {
+                                    $size: {
+                                        $filter: {
+                                            input: '$posts_children',
+                                            as: 'item',
+                                            cond: {
+                                                $eq: ['$$item.type', enums_1.PostType.Comment]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $project: {
+                                posts_children: 0,
+                                user: {
+                                    password: 0,
+                                    email_verify_token: 0,
+                                    forgot_password_token: 0,
+                                    post_circle: 0,
+                                    date_of_birth: 0
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: '_id',
+                    foreignField: 'followed_user_id',
+                    as: 'followers'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: '_id',
+                    foreignField: 'user_id',
+                    as: 'following'
+                }
+            },
+            {
+                $addFields: {
+                    followers: {
+                        $size: '$followers'
+                    },
+                    following: {
+                        $size: '$following'
+                    },
+                    isFollowing: {
+                        $in: [new mongodb_1.ObjectId(user_id), '$followers.user_id']
+                    }
+                }
+            },
+            {
+                $project: {
+                    post_circle: 0,
+                    password: 0,
+                    email_verify_token: 0,
+                    forgot_password_token: 0
+                }
+            }
+        ])
+            .toArray();
         return user;
     }
     async follow(user_id, followed_user_id) {

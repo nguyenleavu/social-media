@@ -1,4 +1,4 @@
-import { TokenType, UserVerifyStatus } from '@/constants/enums'
+import { PostType, TokenType, UserVerifyStatus } from '@/constants/enums'
 import HTTP_STATUS from '@/constants/httpStatus'
 import { USER_MESSAGES } from '@/constants/messages'
 import { ErrorWithStatus } from '@/models/Errors'
@@ -371,8 +371,162 @@ class UsersService {
     return user
   }
 
-  async getProfile(username: string) {
-    const user = await databaseServices.users.findOne({ username })
+  async getProfile(username: string, user_id: string) {
+    const [user] = await databaseServices.users
+      .aggregate<User>([
+        {
+          $match: {
+            username
+          }
+        },
+        {
+          $lookup: {
+            from: 'posts',
+            localField: '_id',
+            foreignField: 'user_id',
+            as: 'posts',
+            pipeline: [
+              {
+                $match: {
+                  type: { $in: [PostType.Post, PostType.QuotePost, PostType.Repost] }
+                }
+              },
+              {
+                $lookup: {
+                  from: 'posts',
+                  localField: '_id',
+                  foreignField: 'parent_id',
+                  as: 'posts_children'
+                }
+              },
+              {
+                $addFields: {
+                  comment_count: {
+                    $size: {
+                      $filter: {
+                        input: '$posts_children',
+                        as: 'item',
+                        cond: {
+                          $eq: ['$$item.type', PostType.Comment]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                $project: {
+                  posts_children: 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          $lookup: {
+            from: 'bookmarks',
+            localField: '_id',
+            foreignField: 'user_id',
+            as: 'bookmarks'
+          }
+        },
+        {
+          $lookup: {
+            from: 'posts',
+            localField: 'bookmarks.post_id',
+            foreignField: '_id',
+            as: 'bookmarks',
+            pipeline: [
+              {
+                $lookup: {
+                  from: 'users',
+                  localField: 'user_id',
+                  foreignField: '_id',
+                  as: 'user'
+                }
+              },
+              {
+                $unwind: {
+                  path: '$user'
+                }
+              },
+              {
+                $lookup: {
+                  from: 'posts',
+                  localField: '_id',
+                  foreignField: 'parent_id',
+                  as: 'posts_children'
+                }
+              },
+              {
+                $addFields: {
+                  comment_count: {
+                    $size: {
+                      $filter: {
+                        input: '$posts_children',
+                        as: 'item',
+                        cond: {
+                          $eq: ['$$item.type', PostType.Comment]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                $project: {
+                  posts_children: 0,
+                  user: {
+                    password: 0,
+                    email_verify_token: 0,
+                    forgot_password_token: 0,
+                    post_circle: 0,
+                    date_of_birth: 0
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'followed_user_id',
+            as: 'followers'
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'user_id',
+            as: 'following'
+          }
+        },
+        {
+          $addFields: {
+            followers: {
+              $size: '$followers'
+            },
+            following: {
+              $size: '$following'
+            },
+            isFollowing: {
+              $in: [new ObjectId(user_id), '$followers.user_id']
+            }
+          }
+        },
+        {
+          $project: {
+            post_circle: 0,
+            password: 0,
+            email_verify_token: 0,
+            forgot_password_token: 0
+          }
+        }
+      ])
+      .toArray()
     return user
   }
 

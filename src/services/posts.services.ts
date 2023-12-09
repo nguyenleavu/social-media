@@ -87,6 +87,19 @@ class PostsService {
         },
         {
           $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $unwind: {
+            path: '$user'
+          }
+        },
+        {
+          $lookup: {
             from: 'hashtags',
             localField: 'hashtags',
             foreignField: '_id',
@@ -150,7 +163,7 @@ class PostsService {
               $size: '$likes'
             },
             isLiked: {
-              $in: [user_id, '$likes.user_id']
+              $in: [new ObjectId(user_id), '$likes.user_id']
             },
             comment_count: {
               $size: {
@@ -279,21 +292,30 @@ class PostsService {
           },
           {
             $match: {
-              $or: [
+              $and: [
                 {
-                  audience: PostAudience.Everyone
-                },
-                {
-                  $and: [
+                  $or: [
                     {
-                      audience: PostAudience.PostCircle
+                      audience: PostAudience.Everyone
                     },
                     {
-                      'user.post_circle': {
-                        $in: [user_id_obj]
-                      }
+                      $and: [
+                        {
+                          audience: PostAudience.PostCircle
+                        },
+                        {
+                          'user.post_circle': {
+                            $in: [user_id_obj]
+                          }
+                        }
+                      ]
                     }
                   ]
+                },
+                {
+                  type: {
+                    $in: [PostType.Post, PostType.QuotePost, PostType.Repost]
+                  }
                 }
               ]
             }

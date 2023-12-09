@@ -112,12 +112,24 @@ exports.postIdValidator = (0, validation_1.validate)((0, express_validator_1.che
                         status: httpStatus_1.default.BAD_REQUEST
                     });
                 }
-                const { user_id } = req.decode_authorization;
                 const [post] = await database_services_1.default.posts
                     .aggregate([
                     {
                         $match: {
                             _id: new mongodb_1.ObjectId(value)
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'users',
+                            localField: 'user_id',
+                            foreignField: '_id',
+                            as: 'user'
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: '$user'
                         }
                     },
                     {
@@ -185,7 +197,7 @@ exports.postIdValidator = (0, validation_1.validate)((0, express_validator_1.che
                                 $size: '$likes'
                             },
                             isLiked: {
-                                $in: [user_id, '$likes.user_id']
+                                $in: ['$user._id', '$likes.user_id']
                             },
                             comment_count: {
                                 $size: {

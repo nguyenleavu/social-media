@@ -61,6 +61,19 @@ class PostsService {
             },
             {
                 $lookup: {
+                    from: 'users',
+                    localField: 'user_id',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$user'
+                }
+            },
+            {
+                $lookup: {
                     from: 'hashtags',
                     localField: 'hashtags',
                     foreignField: '_id',
@@ -124,7 +137,7 @@ class PostsService {
                         $size: '$likes'
                     },
                     isLiked: {
-                        $in: [user_id, '$likes.user_id']
+                        $in: [new mongodb_1.ObjectId(user_id), '$likes.user_id']
                     },
                     comment_count: {
                         $size: {
@@ -243,21 +256,30 @@ class PostsService {
                 },
                 {
                     $match: {
-                        $or: [
+                        $and: [
                             {
-                                audience: enums_1.PostAudience.Everyone
-                            },
-                            {
-                                $and: [
+                                $or: [
                                     {
-                                        audience: enums_1.PostAudience.PostCircle
+                                        audience: enums_1.PostAudience.Everyone
                                     },
                                     {
-                                        'user.post_circle': {
-                                            $in: [user_id_obj]
-                                        }
+                                        $and: [
+                                            {
+                                                audience: enums_1.PostAudience.PostCircle
+                                            },
+                                            {
+                                                'user.post_circle': {
+                                                    $in: [user_id_obj]
+                                                }
+                                            }
+                                        ]
                                     }
                                 ]
+                            },
+                            {
+                                type: {
+                                    $in: [enums_1.PostType.Post, enums_1.PostType.QuotePost, enums_1.PostType.Repost]
+                                }
                             }
                         ]
                     }

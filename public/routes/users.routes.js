@@ -27,7 +27,7 @@ usersRouter.patch('/me', users_middlewares_1.accessTokenValidator, users_middlew
     'avatar',
     'cover_photo'
 ]), (0, handlers_1.wrapRequestHandler)(users_controllers_1.updateMeController));
-usersRouter.get('/:username', (0, handlers_1.wrapRequestHandler)(users_controllers_1.getProfileController));
+usersRouter.get('/:username', users_middlewares_1.accessTokenValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.getProfileController));
 usersRouter.post('/follow', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, users_middlewares_1.followValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.followController));
 usersRouter.delete('/follow/:user_id', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, users_middlewares_1.unFollowValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.unFollowController));
 usersRouter.put('/change-password', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, users_middlewares_1.changePasswordValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.changePasswordController));

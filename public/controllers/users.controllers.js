@@ -135,7 +135,8 @@ const updateMeController = async (req, res) => {
 exports.updateMeController = updateMeController;
 const getProfileController = async (req, res) => {
     const { username } = req.params;
-    const user = await users_services_1.default.getProfile(username);
+    const { user_id } = req.decode_authorization;
+    const user = await users_services_1.default.getProfile(username, user_id);
     return res.json({
         message: messages_1.USER_MESSAGES.GET_PROFILE_SUCCESS,
         data: user
