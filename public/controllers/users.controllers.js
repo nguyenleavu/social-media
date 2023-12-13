@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePasswordController = exports.unFollowController = exports.followController = exports.getProfileController = exports.updateMeController = exports.getMeController = exports.resetPasswordController = exports.verifyForgotPasswordController = exports.forgotPasswordController = exports.resendEmailVerifyController = exports.emailVerifyController = exports.refreshTokenController = exports.logoutController = exports.registerControllers = exports.oauthController = exports.loginControllers = void 0;
+exports.suggestedController = exports.changePasswordController = exports.unFollowController = exports.followController = exports.getProfileController = exports.updateMeController = exports.getMeController = exports.resetPasswordController = exports.verifyForgotPasswordController = exports.forgotPasswordController = exports.resendEmailVerifyController = exports.emailVerifyController = exports.refreshTokenController = exports.logoutController = exports.registerControllers = exports.oauthController = exports.loginControllers = void 0;
 const enums_1 = require("../constants/enums");
 const httpStatus_1 = __importDefault(require("../constants/httpStatus"));
 const messages_1 = require("../constants/messages");
@@ -164,3 +164,16 @@ const changePasswordController = async (req, res) => {
     return res.json(user);
 };
 exports.changePasswordController = changePasswordController;
+const suggestedController = async (req, res) => {
+    const { user_id } = req.decode_authorization;
+    const limit = Number(req.query.limit);
+    const page = Number(req.query.page);
+    const { data, total } = await users_services_1.default.suggested({ user_id, page, limit });
+    return res.json({
+        data,
+        limit,
+        page,
+        total_page: Math.ceil(total / limit)
+    });
+};
+exports.suggestedController = suggestedController;

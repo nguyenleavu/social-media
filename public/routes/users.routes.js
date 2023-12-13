@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const users_controllers_1 = require("../controllers/users.controllers");
 const common_middlewares_1 = require("../middlewares/common.middlewares");
+const posts_middlewares_1 = require("../middlewares/posts.middlewares");
 const users_middlewares_1 = require("../middlewares/users.middlewares");
 const handlers_1 = require("../utils/handlers");
 const express_1 = require("express");
@@ -27,6 +28,7 @@ usersRouter.patch('/me', users_middlewares_1.accessTokenValidator, users_middlew
     'avatar',
     'cover_photo'
 ]), (0, handlers_1.wrapRequestHandler)(users_controllers_1.updateMeController));
+usersRouter.get('/suggested', posts_middlewares_1.paginationValidator, users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.suggestedController));
 usersRouter.get('/:username', users_middlewares_1.accessTokenValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.getProfileController));
 usersRouter.post('/follow', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, users_middlewares_1.followValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.followController));
 usersRouter.delete('/follow/:user_id', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, users_middlewares_1.unFollowValidator, (0, handlers_1.wrapRequestHandler)(users_controllers_1.unFollowController));

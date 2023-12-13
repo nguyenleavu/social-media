@@ -197,3 +197,16 @@ export const changePasswordController = async (
   const user = await usersService.changePassword(user_id, new_password)
   return res.json(user)
 }
+
+export const suggestedController = async (req: Request, res: Response) => {
+  const { user_id } = req.decode_authorization as TokenPayload
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const { data, total } = await usersService.suggested({ user_id, page, limit })
+  return res.json({
+    data,
+    limit,
+    page,
+    total_page: Math.ceil(total / limit)
+  })
+}

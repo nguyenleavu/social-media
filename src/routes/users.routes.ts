@@ -12,11 +12,13 @@ import {
   registerControllers,
   resendEmailVerifyController,
   resetPasswordController,
+  suggestedController,
   unFollowController,
   updateMeController,
   verifyForgotPasswordController
 } from '@/controllers/users.controllers'
 import { filterMiddleware } from '@/middlewares/common.middlewares'
+import { paginationValidator } from '@/middlewares/posts.middlewares'
 import {
   accessTokenValidator,
   changePasswordValidator,
@@ -69,6 +71,13 @@ usersRouter.patch(
     'cover_photo'
   ]),
   wrapRequestHandler(updateMeController)
+)
+usersRouter.get(
+  '/suggested',
+  paginationValidator,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(suggestedController)
 )
 usersRouter.get('/:username', accessTokenValidator, wrapRequestHandler(getProfileController))
 usersRouter.post(

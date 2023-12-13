@@ -501,6 +501,85 @@ class UsersService {
             message: messages_1.USER_MESSAGES.CHANGE_PASSWORD_SUCCESS
         };
     }
+    async suggested({ limit, page, user_id }) {
+        const user_id_obj = new mongodb_1.ObjectId(user_id);
+        const followed_user_ids = await database_services_1.default.followers
+            .find({
+            user_id: user_id_obj
+        }, {
+            projection: {
+                followed_user_id: 1,
+                _id: 0
+            }
+        })
+            .toArray();
+        const ids = (0, lodash_1.map)(followed_user_ids, (item) => item.followed_user_id);
+        const users = await database_services_1.default.users
+            .aggregate([
+            {
+                $match: {
+                    _id: {
+                        $nin: ids,
+                        $ne: user_id_obj
+                    }
+                }
+            },
+            {
+                $skip: limit * (page - 1)
+            },
+            {
+                $limit: limit
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: '_id',
+                    foreignField: 'followed_user_id',
+                    as: 'followers'
+                }
+            },
+            {
+                $group: {
+                    _id: '$_id',
+                    count: {
+                        $sum: {
+                            $size: '$followers'
+                        }
+                    }
+                }
+            },
+            {
+                $sort: {
+                    count: -1
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'user',
+                    pipeline: [
+                        {
+                            $project: {
+                                post_circle: 0,
+                                password: 0,
+                                email_verify_token: 0,
+                                forgot_password_token: 0
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind: {
+                    path: '$user'
+                }
+            }
+        ])
+            .toArray();
+        return { data: users, total: ids.length };
+    }
 }
 const usersService = new UsersService();
 exports.default = usersService;
