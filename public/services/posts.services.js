@@ -139,6 +139,9 @@ class PostsService {
                     isLiked: {
                         $in: [new mongodb_1.ObjectId(user_id), '$likes.user_id']
                     },
+                    isBookmark: {
+                        $in: [new mongodb_1.ObjectId(user_id), '$bookmarks.user_id']
+                    },
                     comment_count: {
                         $size: {
                             $filter: {
@@ -356,6 +359,9 @@ class PostsService {
                         },
                         isLiked: {
                             $in: [user_id_obj, '$likes.user_id']
+                        },
+                        isBookmark: {
+                            $in: [user_id_obj, '$bookmarks.user_id']
                         },
                         comment_count: {
                             $size: {

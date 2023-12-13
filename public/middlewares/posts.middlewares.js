@@ -199,6 +199,9 @@ exports.postIdValidator = (0, validation_1.validate)((0, express_validator_1.che
                             isLiked: {
                                 $in: ['$user._id', '$likes.user_id']
                             },
+                            isBookmark: {
+                                $in: ['$user._id', '$bookmarks.user_id']
+                            },
                             comment_count: {
                                 $size: {
                                     $filter: {
