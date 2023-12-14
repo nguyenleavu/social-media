@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb'
 import databaseServices from './database.services'
 import { MediaType, MediaTypeQuery, PeopleFollow, PostType } from '@/constants/enums'
 import { map } from 'lodash'
+import User from '@/models/schemas/User.schema'
 
 class SearchService {
   async search({
@@ -276,6 +277,85 @@ class SearchService {
     })
 
     return { data: posts, total: total[0]?.total || 0 }
+  }
+
+  async searchUsername({
+    username,
+    limit,
+    page,
+    user_id
+  }: {
+    username: string
+    limit: number
+    page: number
+    user_id: string
+  }) {
+    const user_id_obj = new ObjectId(user_id)
+
+    const [users, total] = await Promise.all([
+      databaseServices.users
+        .aggregate<User>([
+          {
+            $match: {
+              $and: [
+                {
+                  username: {
+                    $regex: username
+                  }
+                },
+                {
+                  _id: {
+                    $ne: user_id_obj
+                  }
+                }
+              ]
+            }
+          },
+          {
+            $skip: limit * (page - 1)
+          },
+          {
+            $limit: limit
+          },
+          {
+            $project: {
+              posts_children: 0,
+              user: {
+                password: 0,
+                email_verify_token: 0,
+                forgot_password_token: 0,
+                post_circle: 0,
+                date_of_birth: 0
+              }
+            }
+          }
+        ])
+        .toArray(),
+      databaseServices.users
+        .aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  username: {
+                    $regex: username
+                  }
+                },
+                {
+                  _id: {
+                    $ne: user_id_obj
+                  }
+                }
+              ]
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+    return { data: users, total: total[0].total || 0 }
   }
 }
 

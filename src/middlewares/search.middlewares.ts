@@ -28,3 +28,16 @@ export const searchValidator = validate(
     ['query']
   )
 )
+
+export const searchUserValidator = validate(
+  checkSchema(
+    {
+      username: {
+        isString: {
+          errorMessage: 'Username must be string'
+        }
+      }
+    },
+    ['query']
+  )
+)

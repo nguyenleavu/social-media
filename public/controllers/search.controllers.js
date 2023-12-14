@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchController = void 0;
+exports.searchUserController = exports.searchController = void 0;
 const searchs_services_1 = __importDefault(require("../services/searchs.services"));
 const searchController = async (req, res) => {
     const limit = Number(req.query.limit);
@@ -21,7 +21,7 @@ const searchController = async (req, res) => {
         user_id
     });
     return res.json({
-        message: 'Oke',
+        message: 'Search success',
         data,
         limit,
         page,
@@ -29,3 +29,23 @@ const searchController = async (req, res) => {
     });
 };
 exports.searchController = searchController;
+const searchUserController = async (req, res) => {
+    const limit = Number(req.query.limit);
+    const page = Number(req.query.page);
+    const username = req.query.username;
+    const user_id = req.decode_authorization?.user_id;
+    const { data, total } = await searchs_services_1.default.searchUsername({
+        limit,
+        page,
+        username,
+        user_id
+    });
+    return res.json({
+        message: 'Search success',
+        data,
+        limit,
+        page,
+        total_page: Math.ceil(total / limit)
+    });
+};
+exports.searchUserController = searchUserController;

@@ -254,6 +254,73 @@ class SearchService {
         });
         return { data: posts, total: total[0]?.total || 0 };
     }
+    async searchUsername({ username, limit, page, user_id }) {
+        const user_id_obj = new mongodb_1.ObjectId(user_id);
+        const [users, total] = await Promise.all([
+            database_services_1.default.users
+                .aggregate([
+                {
+                    $match: {
+                        $and: [
+                            {
+                                username: {
+                                    $regex: username
+                                }
+                            },
+                            {
+                                _id: {
+                                    $ne: user_id_obj
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $skip: limit * (page - 1)
+                },
+                {
+                    $limit: limit
+                },
+                {
+                    $project: {
+                        posts_children: 0,
+                        user: {
+                            password: 0,
+                            email_verify_token: 0,
+                            forgot_password_token: 0,
+                            post_circle: 0,
+                            date_of_birth: 0
+                        }
+                    }
+                }
+            ])
+                .toArray(),
+            database_services_1.default.users
+                .aggregate([
+                {
+                    $match: {
+                        $and: [
+                            {
+                                username: {
+                                    $regex: username
+                                }
+                            },
+                            {
+                                _id: {
+                                    $ne: user_id_obj
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $count: 'total'
+                }
+            ])
+                .toArray()
+        ]);
+        return { data: users, total: total[0].total || 0 };
+    }
 }
 const searchService = new SearchService();
 exports.default = searchService;
