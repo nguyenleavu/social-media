@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.videoStatusController = exports.serverSegmentController = exports.serverM3U8controller = exports.serverVideoStreamController = exports.serverImageController = exports.uploadVideoHLSController = exports.uploadVideoController = exports.uploadImageController = void 0;
+exports.videoStatusController = exports.serverSegmentController = exports.serverM3U8controller = exports.serverVideoStreamController = exports.serverImageController = exports.uploadVideoHLSController = exports.cropVideoController = exports.uploadVideoController = exports.uploadImageController = void 0;
 const dir_1 = require("../constants/dir");
 const httpStatus_1 = __importDefault(require("../constants/httpStatus"));
 const messages_1 = require("../constants/messages");
@@ -23,6 +23,15 @@ const uploadVideoController = async (req, res) => {
     return res.json({ message: messages_1.USER_MESSAGES.UPLOAD_VIDEO_SUCCESS, data });
 };
 exports.uploadVideoController = uploadVideoController;
+const cropVideoController = async (req, res) => {
+    const width = Number(req.query.width);
+    const height = Number(req.query.height);
+    const x = Number(req.query.x);
+    const y = Number(req.query.y);
+    const data = await medias_services_1.default.cropVideo(req, height, width, x, y);
+    return res.json({ message: messages_1.USER_MESSAGES.UPLOAD_VIDEO_SUCCESS, data });
+};
+exports.cropVideoController = cropVideoController;
 const uploadVideoHLSController = async (req, res) => {
     const data = await medias_services_1.default.uploadVideoHLS(req);
     return res.json({ message: messages_1.USER_MESSAGES.UPLOAD_VIDEO_SUCCESS, data });

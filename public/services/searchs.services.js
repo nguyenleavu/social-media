@@ -319,7 +319,7 @@ class SearchService {
             ])
                 .toArray()
         ]);
-        return { data: users, total: total[0].total || 0 };
+        return { data: users, total: total[0]?.total || 0 };
     }
 }
 const searchService = new SearchService();

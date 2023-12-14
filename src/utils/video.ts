@@ -300,3 +300,15 @@ export const encodeHLSWithMultipleVideoStreams = async (inputPath: string) => {
   await runCommandWithProgress('ffmpeg', args as string[])
   console.log('Convert thành công')
 }
+
+export const cropVideoWithProgress = async (inputPath: string, width: number, height: number, x: number, y: number) => {
+  const parent_folder = path.join(inputPath, '..')
+  const outputPath = path.join(parent_folder, 'output.mp4')
+  await runCommandWithProgress('ffmpeg', [
+    '-i',
+    inputPath,
+    '-filter:v',
+    `crop=${width}:${height}:${x}:${y}`,
+    outputPath
+  ])
+}

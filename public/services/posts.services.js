@@ -479,6 +479,112 @@ class PostsService {
         });
         return { data: posts, total: total[0]?.total || 0 };
     }
+    async getAllMedia({ limit, page, medias_type }) {
+        let query = {};
+        if (medias_type === enums_1.MediaType.Video) {
+            query = {
+                'medias.type': {
+                    $eq: 1
+                }
+            };
+        }
+        const [posts, total] = await Promise.all([
+            database_services_1.default.posts
+                .aggregate([
+                {
+                    $match: {
+                        $and: [
+                            {
+                                parent_id: null
+                            },
+                            {
+                                'medias.url': {
+                                    $exists: true
+                                }
+                            },
+                            query
+                        ]
+                    }
+                },
+                {
+                    $skip: limit * (page - 1)
+                },
+                {
+                    $limit: limit
+                },
+                {
+                    $lookup: {
+                        from: 'likes',
+                        localField: '_id',
+                        foreignField: 'post_id',
+                        as: 'likes'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'posts',
+                        localField: '_id',
+                        foreignField: 'parent_id',
+                        as: 'posts_children'
+                    }
+                },
+                {
+                    $addFields: {
+                        likes: {
+                            $size: '$likes'
+                        },
+                        comment_count: {
+                            $size: {
+                                $filter: {
+                                    input: '$posts_children',
+                                    as: 'item',
+                                    cond: {
+                                        $eq: ['$$item.type', 2]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        medias: 1,
+                        likes: 1,
+                        comment_count: 1
+                    }
+                },
+                {
+                    $sort: {
+                        created_at: -1
+                    }
+                }
+            ])
+                .toArray(),
+            database_services_1.default.posts
+                .aggregate([
+                {
+                    $match: {
+                        $and: [
+                            {
+                                parent_id: null
+                            },
+                            {
+                                'medias.url': {
+                                    $exists: true
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $count: 'total'
+                }
+            ])
+                .toArray()
+        ]);
+        return { data: posts, total: total[0]?.total || 0 };
+    }
 }
 const postsService = new PostsService();
 exports.default = postsService;

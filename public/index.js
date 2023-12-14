@@ -20,6 +20,7 @@ const users_routes_1 = __importDefault(require("./routes/users.routes"));
 const database_services_1 = __importDefault(require("./services/database.services"));
 const file_1 = require("./utils/file");
 const socket_1 = __importDefault(require("./utils/socket"));
+const hashtag_routes_1 = __importDefault(require("./routes/hashtag.routes"));
 (0, dotenv_1.config)();
 database_services_1.default.connect().then(() => {
     database_services_1.default.indexUser();
@@ -46,6 +47,7 @@ app.use('/posts', posts_routes_1.default);
 app.use('/bookmarks', bookmarks_routes_1.default);
 app.use('/likes', like_routes_1.default);
 app.use('/search', search_routes_1.default);
+app.use('/hashtag', hashtag_routes_1.default);
 app.use('/conversations', conversation_routes_1.default);
 // Error handler
 app.use(errors_middlewares_1.defaultErrorHandler);

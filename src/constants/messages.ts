@@ -89,7 +89,8 @@ export const POST_MESSAGE = {
   GET_POST_SUCCESS: 'Get post success',
   POST_IS_NOT_PUBLIC: 'Post is not public',
   GET_POST_CHILDREN_SUCCESS: 'Get post children success',
-  GET_NEWS_FEEDS_SUCCESS: 'Get new feeds success'
+  GET_NEWS_FEEDS_SUCCESS: 'Get new feeds success',
+  GET_MEDIAS_SUCCESS: 'Get medias success'
 }
 
 export const BOOKMARK_MESSAGE = {

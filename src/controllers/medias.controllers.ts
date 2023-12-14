@@ -19,6 +19,15 @@ export const uploadVideoController = async (req: Request, res: Response) => {
   return res.json({ message: USER_MESSAGES.UPLOAD_VIDEO_SUCCESS, data })
 }
 
+export const cropVideoController = async (req: Request, res: Response) => {
+  const width = Number(req.query.width)
+  const height = Number(req.query.height)
+  const x = Number(req.query.x)
+  const y = Number(req.query.y)
+  const data = await mediasService.cropVideo(req, height, width, x, y)
+  return res.json({ message: USER_MESSAGES.UPLOAD_VIDEO_SUCCESS, data })
+}
+
 export const uploadVideoHLSController = async (req: Request, res: Response) => {
   const data = await mediasService.uploadVideoHLS(req)
   return res.json({ message: USER_MESSAGES.UPLOAD_VIDEO_SUCCESS, data })

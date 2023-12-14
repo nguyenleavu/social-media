@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = require("../constants/config");
 const dir_1 = require("../constants/dir");
 const enums_1 = require("../constants/enums");
 const VideoStatus_schema_1 = __importDefault(require("../models/schemas/VideoStatus.schema"));
@@ -134,15 +133,29 @@ class MediasService {
         }));
         return data;
     }
+    async cropVideo(req, height, width, x, y) {
+        const files = await (0, file_1.handleUploadVideo)(req);
+        await (0, video_1.cropVideoWithProgress)(files[0].filepath, width, height, x, y);
+        const filePath = path_1.default.resolve(dir_1.UPLOAD_VIDEO_DIR, 'output.mp4');
+        const result = await (0, s3_1.uploadFileToS3)({
+            fileName: 'videos/' + files[0].newFilename,
+            contentType: mime_1.default.getType(filePath),
+            filePath: filePath
+        });
+        promises_1.default.unlink(files[0].filepath);
+        promises_1.default.unlink(filePath);
+        return {
+            url: result.Location,
+            type: enums_1.MediaType.Video
+        };
+    }
     async uploadVideoHLS(req) {
         const files = await (0, file_1.handleUploadVideoHLS)(req);
         const data = await Promise.all(files.map(async (file) => {
             const newFilename = (0, file_1.getNameFromFullName)(file.newFilename);
             queue.enqueue(file.filepath);
             return {
-                url: config_1.isProduction
-                    ? `${process.env.HOST}/static/video-hls/${newFilename}/master.m3u8`
-                    : `http://localhost:${process.env.PORT}/static/video-hls/${newFilename}/master.m3u8`,
+                url: `${process.env.HOST}/static/video-hls/${newFilename}/master.m3u8`,
                 type: enums_1.MediaType.HLS
             };
         }));

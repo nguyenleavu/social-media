@@ -1,10 +1,11 @@
 import {
+  cropVideoController,
   uploadImageController,
   uploadVideoController,
   uploadVideoHLSController,
   videoStatusController
 } from '@/controllers/medias.controllers'
-import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/users.middlewares'
+import { accessTokenValidator, croppedAreaValidator, verifiedUserValidator } from '@/middlewares/users.middlewares'
 import { wrapRequestHandler } from '@/utils/handlers'
 import { Router } from 'express'
 
@@ -22,6 +23,15 @@ mediasRouter.post(
   verifiedUserValidator,
   wrapRequestHandler(uploadVideoController)
 )
+
+mediasRouter.post(
+  '/crop-video',
+  accessTokenValidator,
+  verifiedUserValidator,
+  croppedAreaValidator,
+  wrapRequestHandler(cropVideoController)
+)
+
 mediasRouter.post(
   '/upload-video-hls',
   accessTokenValidator,

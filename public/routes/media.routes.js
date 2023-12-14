@@ -7,6 +7,7 @@ const express_1 = require("express");
 const mediasRouter = (0, express_1.Router)();
 mediasRouter.post('/upload-image', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, (0, handlers_1.wrapRequestHandler)(medias_controllers_1.uploadImageController));
 mediasRouter.post('/upload-video', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, (0, handlers_1.wrapRequestHandler)(medias_controllers_1.uploadVideoController));
+mediasRouter.post('/crop-video', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, users_middlewares_1.croppedAreaValidator, (0, handlers_1.wrapRequestHandler)(medias_controllers_1.cropVideoController));
 mediasRouter.post('/upload-video-hls', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, (0, handlers_1.wrapRequestHandler)(medias_controllers_1.uploadVideoHLSController));
 mediasRouter.get('/video-status/:id', users_middlewares_1.accessTokenValidator, users_middlewares_1.verifiedUserValidator, (0, handlers_1.wrapRequestHandler)(medias_controllers_1.videoStatusController));
 exports.default = mediasRouter;

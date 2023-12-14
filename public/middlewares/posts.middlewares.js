@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.paginationValidator = exports.getPostChildrenValidator = exports.audienceValidator = exports.postIdValidator = exports.createPostValidator = void 0;
+exports.mediasTypeValidator = exports.paginationValidator = exports.getPostChildrenValidator = exports.audienceValidator = exports.postIdValidator = exports.createPostValidator = void 0;
 const enums_1 = require("../constants/enums");
 const httpStatus_1 = __importDefault(require("../constants/httpStatus"));
 const messages_1 = require("../constants/messages");
@@ -321,6 +321,14 @@ exports.paginationValidator = (0, validation_1.validate)((0, express_validator_1
                 }
                 return true;
             }
+        }
+    }
+}, ['query']));
+exports.mediasTypeValidator = (0, validation_1.validate)((0, express_validator_1.checkSchema)({
+    medias_type: {
+        isIn: {
+            options: [mediaType],
+            errorMessage: messages_1.POST_MESSAGE.INVALID_TYPE
         }
     }
 }, ['query']));

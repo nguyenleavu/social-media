@@ -71,3 +71,22 @@ export const getNewFeedsController = async (req: Request, res: Response) => {
     total_page: Math.ceil(total / limit)
   })
 }
+
+export const getAllController = async (req: Request, res: Response) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const medias_type = Number(req.query.medias_type)
+
+  const { data, total } = await postsService.getAllMedia({
+    limit,
+    page,
+    medias_type
+  })
+  return res.json({
+    message: POST_MESSAGE.GET_MEDIAS_SUCCESS,
+    data,
+    limit,
+    page,
+    total_page: Math.ceil(total / limit)
+  })
+}

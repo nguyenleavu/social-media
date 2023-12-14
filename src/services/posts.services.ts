@@ -4,7 +4,7 @@ import databaseServices from './database.services'
 import { ObjectId, WithId } from 'mongodb'
 import { map } from 'lodash'
 import Hashtag from '@/models/schemas/Hashtag.schema'
-import { PostAudience, PostType } from '@/constants/enums'
+import { MediaType, PostAudience, PostType } from '@/constants/enums'
 
 class PostsService {
   async checkAndCreateHashtags(hashtags: string[]) {
@@ -518,6 +518,116 @@ class PostsService {
       post.updated_at = date
       post.user_views += 1
     })
+    return { data: posts, total: total[0]?.total || 0 }
+  }
+
+  async getAllMedia({ limit, page, medias_type }: { medias_type: number; limit: number; page: number }) {
+    let query = {}
+
+    if (medias_type === MediaType.Video) {
+      query = {
+        'medias.type': {
+          $eq: 1
+        }
+      }
+    }
+
+    const [posts, total] = await Promise.all([
+      databaseServices.posts
+        .aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  parent_id: null
+                },
+                {
+                  'medias.url': {
+                    $exists: true
+                  }
+                },
+                query
+              ]
+            }
+          },
+          {
+            $skip: limit * (page - 1)
+          },
+          {
+            $limit: limit
+          },
+          {
+            $lookup: {
+              from: 'likes',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'likes'
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              localField: '_id',
+              foreignField: 'parent_id',
+              as: 'posts_children'
+            }
+          },
+          {
+            $addFields: {
+              likes: {
+                $size: '$likes'
+              },
+              comment_count: {
+                $size: {
+                  $filter: {
+                    input: '$posts_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', 2]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            $project: {
+              _id: 1,
+              medias: 1,
+              likes: 1,
+              comment_count: 1
+            }
+          },
+          {
+            $sort: {
+              created_at: -1
+            }
+          }
+        ])
+        .toArray(),
+      databaseServices.posts
+        .aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  parent_id: null
+                },
+                {
+                  'medias.url': {
+                    $exists: true
+                  }
+                }
+              ]
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+
     return { data: posts, total: total[0]?.total || 0 }
   }
 }

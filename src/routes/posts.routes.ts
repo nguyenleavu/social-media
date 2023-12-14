@@ -1,5 +1,6 @@
 import {
   createPostController,
+  getAllController,
   getNewFeedsController,
   getPostChildrenController,
   getPostController
@@ -8,6 +9,7 @@ import {
   audienceValidator,
   createPostValidator,
   getPostChildrenValidator,
+  mediasTypeValidator,
   paginationValidator,
   postIdValidator
 } from '@/middlewares/posts.middlewares'
@@ -24,7 +26,7 @@ postsRouter.post(
   createPostValidator,
   wrapRequestHandler(createPostController)
 )
-
+postsRouter.get('/medias', paginationValidator, mediasTypeValidator, wrapRequestHandler(getAllController))
 postsRouter.get(
   '/:post_id',
   postIdValidator,

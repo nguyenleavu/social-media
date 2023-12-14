@@ -5,17 +5,18 @@ import { Media } from '@/models/Other'
 import VideoStatus from '@/models/schemas/VideoStatus.schema'
 import { getFiles, getNameFromFullName, handleUploadImage, handleUploadVideo, handleUploadVideoHLS } from '@/utils/file'
 import { uploadFileToS3 } from '@/utils/s3'
-import { encodeHLSWithMultipleVideoStreams } from '@/utils/video'
+import { cropVideoWithProgress, encodeHLSWithMultipleVideoStreams } from '@/utils/video'
 import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
 import { config } from 'dotenv'
 import { Request } from 'express'
-import fsPromise from 'fs/promises'
+import fsPromise, { readFile } from 'fs/promises'
 import { map } from 'lodash'
 import mime from 'mime'
 import path from 'path'
 import sharp from 'sharp'
 import databaseServices from './database.services'
 import { rimrafSync } from 'rimraf'
+import { readFileSync } from 'fs'
 
 config()
 
@@ -157,6 +158,23 @@ class MediasService {
     return data
   }
 
+  async cropVideo(req: Request, height: number, width: number, x: number, y: number) {
+    const files = await handleUploadVideo(req)
+    await cropVideoWithProgress(files[0].filepath, width, height, x, y)
+    const filePath = path.resolve(UPLOAD_VIDEO_DIR, 'output.mp4')
+    const result = await uploadFileToS3({
+      fileName: 'videos/' + files[0].newFilename,
+      contentType: mime.getType(filePath) as string,
+      filePath: filePath
+    })
+    fsPromise.unlink(files[0].filepath)
+    fsPromise.unlink(filePath)
+    return {
+      url: (result as CompleteMultipartUploadCommandOutput).Location as string,
+      type: MediaType.Video
+    }
+  }
+
   async uploadVideoHLS(req: Request) {
     const files = await handleUploadVideoHLS(req)
     const data: Media[] = await Promise.all(
@@ -164,9 +182,7 @@ class MediasService {
         const newFilename = getNameFromFullName(file.newFilename)
         queue.enqueue(file.filepath)
         return {
-          url: isProduction
-            ? `${process.env.HOST}/static/video-hls/${newFilename}/master.m3u8`
-            : `http://localhost:${process.env.PORT}/static/video-hls/${newFilename}/master.m3u8`,
+          url: `${process.env.HOST}/static/video-hls/${newFilename}/master.m3u8`,
           type: MediaType.HLS
         }
       })

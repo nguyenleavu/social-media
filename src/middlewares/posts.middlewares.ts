@@ -364,3 +364,17 @@ export const paginationValidator = validate(
     ['query']
   )
 )
+
+export const mediasTypeValidator = validate(
+  checkSchema(
+    {
+      medias_type: {
+        isIn: {
+          options: [mediaType],
+          errorMessage: POST_MESSAGE.INVALID_TYPE
+        }
+      }
+    },
+    ['query']
+  )
+)

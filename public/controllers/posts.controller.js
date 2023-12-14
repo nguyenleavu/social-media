@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getNewFeedsController = exports.getPostChildrenController = exports.getPostController = exports.createPostController = void 0;
+exports.getAllController = exports.getNewFeedsController = exports.getPostChildrenController = exports.getPostController = exports.createPostController = void 0;
 const posts_services_1 = __importDefault(require("../services/posts.services"));
 const messages_1 = require("../constants/messages");
 const createPostController = async (req, res) => {
@@ -69,3 +69,21 @@ const getNewFeedsController = async (req, res) => {
     });
 };
 exports.getNewFeedsController = getNewFeedsController;
+const getAllController = async (req, res) => {
+    const limit = Number(req.query.limit);
+    const page = Number(req.query.page);
+    const medias_type = Number(req.query.medias_type);
+    const { data, total } = await posts_services_1.default.getAllMedia({
+        limit,
+        page,
+        medias_type
+    });
+    return res.json({
+        message: messages_1.POST_MESSAGE.GET_MEDIAS_SUCCESS,
+        data,
+        limit,
+        page,
+        total_page: Math.ceil(total / limit)
+    });
+};
+exports.getAllController = getAllController;

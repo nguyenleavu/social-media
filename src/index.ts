@@ -15,6 +15,7 @@ import usersRouter from './routes/users.routes'
 import databaseServices from './services/database.services'
 import { initFolder } from './utils/file'
 import initSocket from './utils/socket'
+import hashtagRouter from './routes/hashtag.routes'
 
 config()
 
@@ -48,6 +49,7 @@ app.use('/posts', postsRouter)
 app.use('/bookmarks', bookmarksRouter)
 app.use('/likes', likesRouter)
 app.use('/search', searchRouter)
+app.use('/hashtag', hashtagRouter)
 app.use('/conversations', conversationRouter)
 
 // Error handler

@@ -836,3 +836,23 @@ export const getConversationValidator = validate(
     ['params']
   )
 )
+
+export const croppedAreaValidator = validate(
+  checkSchema(
+    {
+      width: {
+        isNumeric: true
+      },
+      height: {
+        isNumeric: true
+      },
+      x: {
+        isNumeric: true
+      },
+      y: {
+        isNumeric: true
+      }
+    },
+    ['query']
+  )
+)

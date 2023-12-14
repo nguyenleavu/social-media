@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.encodeHLSWithMultipleVideoStreams = void 0;
+exports.cropVideoWithProgress = exports.encodeHLSWithMultipleVideoStreams = void 0;
 const child_process_1 = require("child_process");
 const path_1 = __importDefault(require("path"));
 const MAXIMUM_BITRATE_720P = 5 * 10 ** 6; // 5Mbps
@@ -295,3 +295,15 @@ const encodeHLSWithMultipleVideoStreams = async (inputPath) => {
     console.log('Convert thành công');
 };
 exports.encodeHLSWithMultipleVideoStreams = encodeHLSWithMultipleVideoStreams;
+const cropVideoWithProgress = async (inputPath, width, height, x, y) => {
+    const parent_folder = path_1.default.join(inputPath, '..');
+    const outputPath = path_1.default.join(parent_folder, 'output.mp4');
+    await runCommandWithProgress('ffmpeg', [
+        '-i',
+        inputPath,
+        '-filter:v',
+        `crop=${width}:${height}:${x}:${y}`,
+        outputPath
+    ]);
+};
+exports.cropVideoWithProgress = cropVideoWithProgress;

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getConversationValidator = exports.isUserLoggedInValidator = exports.changePasswordValidator = exports.unFollowValidator = exports.followValidator = exports.updateMeValidator = exports.verifiedUserValidator = exports.resetPasswordValidator = exports.verifyForgotPasswordValidator = exports.forgotPasswordValidator = exports.emailVerifyTokenValidator = exports.refreshTokenValidator = exports.accessTokenValidator = exports.registerValidator = exports.loginValidator = void 0;
+exports.croppedAreaValidator = exports.getConversationValidator = exports.isUserLoggedInValidator = exports.changePasswordValidator = exports.unFollowValidator = exports.followValidator = exports.updateMeValidator = exports.verifiedUserValidator = exports.resetPasswordValidator = exports.verifyForgotPasswordValidator = exports.forgotPasswordValidator = exports.emailVerifyTokenValidator = exports.refreshTokenValidator = exports.accessTokenValidator = exports.registerValidator = exports.loginValidator = void 0;
 const enums_1 = require("../constants/enums");
 const httpStatus_1 = __importDefault(require("../constants/httpStatus"));
 const messages_1 = require("../constants/messages");
@@ -745,3 +745,17 @@ exports.getConversationValidator = (0, validation_1.validate)((0, express_valida
         }
     }
 }, ['params']));
+exports.croppedAreaValidator = (0, validation_1.validate)((0, express_validator_1.checkSchema)({
+    width: {
+        isNumeric: true
+    },
+    height: {
+        isNumeric: true
+    },
+    x: {
+        isNumeric: true
+    },
+    y: {
+        isNumeric: true
+    }
+}, ['query']));

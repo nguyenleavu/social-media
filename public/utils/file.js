@@ -52,7 +52,7 @@ const handleUploadVideo = (req) => {
     const form = (0, formidable_1.default)({
         uploadDir: dir_1.UPLOAD_VIDEO_DIR,
         maxFiles: 1,
-        maxFileSize: 200 * 1024 * 1024,
+        maxFileSize: 100 * 1024 * 1024,
         filter: ({ name, originalFilename, mimetype }) => {
             const isValid = name === 'video' && Boolean(mimetype?.includes('video/') || mimetype?.includes('quicktime'));
             if (!isValid) {
@@ -104,7 +104,7 @@ const handleUploadVideoHLS = async (req) => {
     const form = (0, formidable_1.default)({
         uploadDir: folderPath,
         maxFiles: 1,
-        maxFileSize: 200 * 1024 * 1024,
+        maxFileSize: 100 * 1024 * 1024,
         filter: ({ name, originalFilename, mimetype }) => {
             const isValid = name === 'video' && Boolean(mimetype?.includes('video/') || mimetype?.includes('quicktime'));
             if (!isValid) {
@@ -137,6 +137,7 @@ exports.handleUploadVideoHLS = handleUploadVideoHLS;
 const getFiles = (dir, files = []) => {
     // Get an array of all files and directories in the passed directory using fs.readdirSync
     const fileList = fs_1.default.readdirSync(dir);
+    console.log('fileList', fileList);
     // Create the full path of the file/directory by concatenating the passed directory and file/directory name
     for (const file of fileList) {
         const name = `${dir}/${file}`;
