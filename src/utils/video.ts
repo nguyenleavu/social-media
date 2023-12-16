@@ -1,3 +1,4 @@
+import { UPLOAD_VIDEO_DIR } from '@/constants/dir'
 import { spawn } from 'child_process'
 import path from 'path'
 
@@ -302,8 +303,7 @@ export const encodeHLSWithMultipleVideoStreams = async (inputPath: string) => {
 }
 
 export const cropVideoWithProgress = async (inputPath: string, width: number, height: number, x: number, y: number) => {
-  const parent_folder = path.join(inputPath, '..')
-  const outputPath = path.join(parent_folder, 'output.mp4')
+  const outputPath = path.resolve(UPLOAD_VIDEO_DIR, 'output.mp4')
   await runCommandWithProgress('ffmpeg', [
     '-y',
     '-i',
