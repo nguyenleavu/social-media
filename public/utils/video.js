@@ -299,10 +299,17 @@ const cropVideoWithProgress = async (inputPath, width, height, x, y) => {
     const parent_folder = path_1.default.join(inputPath, '..');
     const outputPath = path_1.default.join(parent_folder, 'output.mp4');
     await runCommandWithProgress('ffmpeg', [
+        '-y',
         '-i',
         inputPath,
         '-filter:v',
         `crop=${width}:${height}:${x}:${y}`,
+        '-threads',
+        '5',
+        '-preset',
+        'ultrafast',
+        '-strict',
+        '-2',
         outputPath
     ]);
 };
