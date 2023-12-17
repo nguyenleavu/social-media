@@ -14,9 +14,9 @@ const promises_1 = __importDefault(require("fs/promises"));
 const lodash_1 = require("lodash");
 const mime_1 = __importDefault(require("mime"));
 const path_1 = __importDefault(require("path"));
+const rimraf_1 = require("rimraf");
 const sharp_1 = __importDefault(require("sharp"));
 const database_services_1 = __importDefault(require("./database.services"));
-const rimraf_1 = require("rimraf");
 (0, dotenv_1.config)();
 class Queue {
     items;

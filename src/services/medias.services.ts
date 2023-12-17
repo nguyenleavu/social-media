@@ -1,4 +1,3 @@
-import { isProduction } from '@/constants/config'
 import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from '@/constants/dir'
 import { EncodingStatus, MediaType } from '@/constants/enums'
 import { Media } from '@/models/Other'
@@ -9,14 +8,13 @@ import { cropVideoWithProgress, encodeHLSWithMultipleVideoStreams } from '@/util
 import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
 import { config } from 'dotenv'
 import { Request } from 'express'
-import fsPromise, { readFile } from 'fs/promises'
+import fsPromise from 'fs/promises'
 import { map } from 'lodash'
 import mime from 'mime'
 import path from 'path'
+import { rimrafSync } from 'rimraf'
 import sharp from 'sharp'
 import databaseServices from './database.services'
-import { rimrafSync } from 'rimraf'
-import { readFileSync } from 'fs'
 
 config()
 
