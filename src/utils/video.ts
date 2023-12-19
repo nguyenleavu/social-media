@@ -385,5 +385,5 @@ export const cropVideoWithProgress = async (inputPath: string, width: number, he
     slash(outputPath)
   ]
 
-  await $`ffmpeg /usr/bin/bash ${args}`
+  await $`ffmpeg ${args}`
 }

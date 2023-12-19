@@ -216,6 +216,6 @@ const cropVideoWithProgress = async (inputPath, width, height, x, y) => {
         '-2',
         slash(outputPath)
     ];
-    await $ `ffmpeg /usr/bin/bash ${args}`;
+    await $ `ffmpeg ${args}`;
 };
 exports.cropVideoWithProgress = cropVideoWithProgress;

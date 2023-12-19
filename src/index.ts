@@ -16,6 +16,7 @@ import databaseServices from './services/database.services'
 import { initFolder } from './utils/file'
 import initSocket from './utils/socket'
 import hashtagRouter from './routes/hashtag.routes'
+// import '@/utils/fake'
 
 config()
 

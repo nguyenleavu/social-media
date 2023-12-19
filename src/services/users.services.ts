@@ -145,7 +145,7 @@ class UsersService {
     const nanoId = (await import('nanoid')).nanoid
     const idName = nanoId()
     const avatar =
-      'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/16f5ccab09a4d9bc58768b400.jpg'
+      'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/275aa1e76983e380bba82df00.jpg'
     await databaseServices.users.insertOne(
       new User({
         ...payload,

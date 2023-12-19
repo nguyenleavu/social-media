@@ -21,6 +21,7 @@ const database_services_1 = __importDefault(require("./services/database.service
 const file_1 = require("./utils/file");
 const socket_1 = __importDefault(require("./utils/socket"));
 const hashtag_routes_1 = __importDefault(require("./routes/hashtag.routes"));
+// import './utils/fake'
 (0, dotenv_1.config)();
 database_services_1.default.connect().then(() => {
     database_services_1.default.indexUser();
