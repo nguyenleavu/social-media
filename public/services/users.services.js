@@ -325,6 +325,14 @@ class UsersService {
                         },
                         {
                             $lookup: {
+                                from: 'likes',
+                                localField: '_id',
+                                foreignField: 'post_id',
+                                as: 'likes'
+                            }
+                        },
+                        {
+                            $lookup: {
                                 from: 'posts',
                                 localField: '_id',
                                 foreignField: 'parent_id',
@@ -343,6 +351,9 @@ class UsersService {
                                             }
                                         }
                                     }
+                                },
+                                likes: {
+                                    $size: '$likes'
                                 }
                             }
                         },
