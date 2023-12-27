@@ -70,13 +70,15 @@ const getNewFeedsController = async (req, res) => {
 };
 exports.getNewFeedsController = getNewFeedsController;
 const getAllController = async (req, res) => {
+    const user_id = req.decode_authorization?.user_id;
     const limit = Number(req.query.limit);
     const page = Number(req.query.page);
     const medias_type = Number(req.query.medias_type);
     const { data, total } = await posts_services_1.default.getAllMedia({
         limit,
         page,
-        medias_type
+        medias_type,
+        user_id
     });
     return res.json({
         message: messages_1.POST_MESSAGE.GET_MEDIAS_SUCCESS,

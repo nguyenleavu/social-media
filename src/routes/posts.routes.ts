@@ -26,7 +26,14 @@ postsRouter.post(
   createPostValidator,
   wrapRequestHandler(createPostController)
 )
-postsRouter.get('/medias', paginationValidator, mediasTypeValidator, wrapRequestHandler(getAllController))
+postsRouter.get(
+  '/medias',
+  accessTokenValidator,
+  verifiedUserValidator,
+  paginationValidator,
+  mediasTypeValidator,
+  wrapRequestHandler(getAllController)
+)
 postsRouter.get(
   '/:post_id',
   postIdValidator,

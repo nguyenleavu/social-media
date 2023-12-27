@@ -6,21 +6,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const enums_1 = require("../constants/enums");
 const User_schema_1 = __importDefault(require("../models/schemas/User.schema"));
 const database_services_1 = __importDefault(require("../services/database.services"));
-const faker_1 = require("@faker-js/faker");
+const vi_1 = require("@faker-js/faker/locale/vi");
 const mongodb_1 = require("mongodb");
 const crypto_1 = require("./crypto");
 const Follower_schema_1 = __importDefault(require("../models/schemas/Follower.schema"));
 const posts_services_1 = __importDefault(require("../services/posts.services"));
 const PASSWORD = '123456789aA@';
-const MY_ID = '65882c5c5339374babe51089';
+const MY_ID = '658bc0fbd3fd9631e47b5796';
 const USER_COUNT = 941;
 const createRandomUser = () => {
     const user = {
-        name: faker_1.faker.internet.displayName(),
-        email: faker_1.faker.internet.email(),
+        name: vi_1.faker.internet.displayName(),
+        email: vi_1.faker.internet.email(),
         password: PASSWORD,
         confirm_password: PASSWORD,
-        date_of_birth: faker_1.faker.date.past().toISOString()
+        date_of_birth: vi_1.faker.date.past().toISOString()
     };
     return user;
 };
@@ -45,75 +45,115 @@ const avatars = [
 ];
 const medias = [
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee00.mp4',
+        type: 1
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa000.jpg',
         type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee01.mp4',
+        type: 1
     },
     {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa001.jpg',
         type: 0
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee02.mp4',
+        type: 1
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa002.jpg',
         type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee03.mp4',
+        type: 1
     },
     {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa003.jpg',
         type: 0
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee04.mp4',
+        type: 1
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa004.jpg',
         type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/b7c6651e7c97e0ac69527c900.mp4',
+        type: 1
     },
     {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa005.jpg',
         type: 0
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos%2Ff7b5c77519b93f5142734c300.mp4',
+        type: 1
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/37abc3843815716785ea6cf00.mp4',
+        type: 1
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/de82cfdf5cf838c249cb5af00.mp4',
+        type: 1
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/de82cfdf5cf838c249cb5af01.mp4',
+        type: 1
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/de82cfdf5cf838c249cb5af02.mp4',
+        type: 1
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa006.jpg',
         type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c301.mp4',
+        type: 1
     },
     {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa007.jpg',
         type: 0
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c302.mp4',
+        type: 1
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1700.jpg',
         type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c302.mp4',
+        type: 1
     },
     {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1701.jpg',
         type: 0
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c301.mp4',
+        type: 1
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1702.jpg',
         type: 0
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos%2Ff7b5c77519b93f5142734c300.mp4',
+        type: 1
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1703.jpg',
-        type: 0
-    },
-    {
-        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1704.jpg',
-        type: 0
-    },
-    {
-        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1705.jpg',
-        type: 0
-    },
-    {
-        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1706.jpg',
-        type: 0
-    },
-    {
-        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1707.jpg',
-        type: 0
-    },
-    {
-        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1708.jpg',
-        type: 0
-    },
-    {
-        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/96576bdc84472b12bb8352200.jpg',
         type: 0
     },
     {
@@ -121,20 +161,48 @@ const medias = [
         type: 1
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1704.jpg',
+        type: 0
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee01.mp4',
         type: 1
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1705.jpg',
+        type: 0
     },
     {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee02.mp4',
         type: 1
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1706.jpg',
+        type: 0
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee03.mp4',
         type: 1
     },
     {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1707.jpg',
+        type: 0
+    },
+    {
         url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee04.mp4',
         type: 1
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1708.jpg',
+        type: 0
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee04.mp4',
+        type: 1
+    },
+    {
+        url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/96576bdc84472b12bb8352200.jpg',
+        type: 0
     }
 ];
 const names = [
@@ -1085,7 +1153,10 @@ const createRandomPost = () => {
     const posts = {
         type: enums_1.PostType.Post,
         audience: enums_1.PostAudience.Everyone,
-        content: faker_1.faker.lorem.paragraph({ min: 20, max: 40 }),
+        content: `{"blocks":[{"key":"8vufd","text":"${vi_1.faker.lorem.paragraph({
+            min: 5,
+            max: 10
+        })}","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`,
         hashtags: [],
         mentions: [],
         medias: [medias[number]],
@@ -1093,10 +1164,9 @@ const createRandomPost = () => {
     };
     return posts;
 };
-const users = faker_1.faker.helpers.multiple(createRandomUser, { count: USER_COUNT });
+const users = vi_1.faker.helpers.multiple(createRandomUser, { count: USER_COUNT });
 const insertMultipleUsers = async (users) => {
     const result = await Promise.all(users.map(async (user, index) => {
-        console.log(index);
         const user_id = new mongodb_1.ObjectId();
         const numberAvatars = Math.floor(Math.random() * avatars.length);
         await database_services_1.default.users.insertOne(new User_schema_1.default({
@@ -1106,6 +1176,7 @@ const insertMultipleUsers = async (users) => {
             post_circle: [user_id],
             username: names[index].username,
             name: names[index].name,
+            email: `${names[index].name}@gmail.com`,
             password: (0, crypto_1.hasPassword)(user.password),
             date_of_birth: new Date(user.date_of_birth),
             verify: enums_1.UserVerifyStatus.Verified

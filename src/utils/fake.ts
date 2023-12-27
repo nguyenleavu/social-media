@@ -3,14 +3,14 @@ import { PostReqBody } from '@/models/requests/Posts.requests'
 import { RegisterReqBody } from '@/models/requests/Users.requests'
 import User from '@/models/schemas/User.schema'
 import databaseServices from '@/services/database.services'
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker/locale/vi'
 import { ObjectId } from 'mongodb'
 import { hasPassword } from './crypto'
 import Follower from '@/models/schemas/Follower.schema'
 import postsService from '@/services/posts.services'
 
 const PASSWORD = '123456789aA@'
-const MY_ID = '65882c5c5339374babe51089'
+const MY_ID = '658bc0fbd3fd9631e47b5796'
 const USER_COUNT = 941
 
 const createRandomUser = () => {
@@ -46,75 +46,115 @@ const avatars = [
 
 const medias = [
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee00.mp4',
+    type: 1
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa000.jpg',
     type: 0
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee01.mp4',
+    type: 1
   },
   {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa001.jpg',
     type: 0
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee02.mp4',
+    type: 1
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa002.jpg',
     type: 0
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee03.mp4',
+    type: 1
   },
   {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa003.jpg',
     type: 0
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee04.mp4',
+    type: 1
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa004.jpg',
     type: 0
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/b7c6651e7c97e0ac69527c900.mp4',
+    type: 1
   },
   {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa005.jpg',
     type: 0
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos%2Ff7b5c77519b93f5142734c300.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/37abc3843815716785ea6cf00.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/de82cfdf5cf838c249cb5af00.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/de82cfdf5cf838c249cb5af01.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/de82cfdf5cf838c249cb5af02.mp4',
+    type: 1
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa006.jpg',
     type: 0
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c301.mp4',
+    type: 1
   },
   {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/458d46cecd6cbdb89d76fa007.jpg',
     type: 0
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c302.mp4',
+    type: 1
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1700.jpg',
     type: 0
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c302.mp4',
+    type: 1
   },
   {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1701.jpg',
     type: 0
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c301.mp4',
+    type: 1
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1702.jpg',
     type: 0
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos%2Ff7b5c77519b93f5142734c300.mp4',
+    type: 1
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1703.jpg',
-    type: 0
-  },
-  {
-    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1704.jpg',
-    type: 0
-  },
-  {
-    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1705.jpg',
-    type: 0
-  },
-  {
-    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1706.jpg',
-    type: 0
-  },
-  {
-    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1707.jpg',
-    type: 0
-  },
-  {
-    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1708.jpg',
-    type: 0
-  },
-  {
-    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/96576bdc84472b12bb8352200.jpg',
     type: 0
   },
   {
@@ -122,20 +162,48 @@ const medias = [
     type: 1
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1704.jpg',
+    type: 0
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee01.mp4',
     type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1705.jpg',
+    type: 0
   },
   {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee02.mp4',
     type: 1
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1706.jpg',
+    type: 0
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee03.mp4',
     type: 1
   },
   {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1707.jpg',
+    type: 0
+  },
+  {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee04.mp4',
     type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/24b979af04028de57252c1708.jpg',
+    type: 0
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/8fd5f09eb5b690795f0a5ee04.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/96576bdc84472b12bb8352200.jpg',
+    type: 0
   }
 ]
 
@@ -1089,7 +1157,10 @@ const createRandomPost = () => {
   const posts: PostReqBody = {
     type: PostType.Post,
     audience: PostAudience.Everyone,
-    content: faker.lorem.paragraph({ min: 20, max: 40 }),
+    content: `{"blocks":[{"key":"8vufd","text":"${faker.lorem.paragraph({
+      min: 5,
+      max: 10
+    })}","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`,
     hashtags: [],
     mentions: [],
     medias: [medias[number]],
@@ -1103,9 +1174,9 @@ const users: RegisterReqBody[] = faker.helpers.multiple(createRandomUser, { coun
 const insertMultipleUsers = async (users: RegisterReqBody[]) => {
   const result = await Promise.all(
     users.map(async (user, index) => {
-      console.log(index)
       const user_id = new ObjectId()
       const numberAvatars = Math.floor(Math.random() * avatars.length)
+
       await databaseServices.users.insertOne(
         new User({
           ...user,
@@ -1114,6 +1185,7 @@ const insertMultipleUsers = async (users: RegisterReqBody[]) => {
           post_circle: [user_id],
           username: names[index].username,
           name: names[index].name,
+          email: `${names[index].name}@gmail.com`,
           password: hasPassword(user.password),
           date_of_birth: new Date(user.date_of_birth),
           verify: UserVerifyStatus.Verified

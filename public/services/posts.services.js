@@ -479,7 +479,8 @@ class PostsService {
         });
         return { data: posts, total: total[0]?.total || 0 };
     }
-    async getAllMedia({ limit, page, medias_type }) {
+    async getAllMedia({ limit, page, medias_type, user_id }) {
+        const user_id_obj = new mongodb_1.ObjectId(user_id);
         let query = {};
         if (medias_type === enums_1.MediaType.Video) {
             query = {
@@ -514,6 +515,19 @@ class PostsService {
                 },
                 {
                     $lookup: {
+                        from: 'users',
+                        localField: 'user_id',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$user'
+                    }
+                },
+                {
+                    $lookup: {
                         from: 'likes',
                         localField: '_id',
                         foreignField: 'post_id',
@@ -529,9 +543,66 @@ class PostsService {
                     }
                 },
                 {
+                    $lookup: {
+                        from: 'hashtags',
+                        localField: 'hashtags',
+                        foreignField: '_id',
+                        as: 'hashtags'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'mentions',
+                        foreignField: '_id',
+                        as: 'mentions'
+                    }
+                },
+                {
+                    $addFields: {
+                        mentions: {
+                            $map: {
+                                input: '$mentions',
+                                as: 'mention',
+                                in: {
+                                    _id: '$$mention._id',
+                                    name: '$$mention.name',
+                                    username: '$$mention.username',
+                                    email: '$$mention.email'
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'bookmarks',
+                        localField: '_id',
+                        foreignField: 'post_id',
+                        as: 'bookmarks'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'likes',
+                        localField: '_id',
+                        foreignField: 'post_id',
+                        as: 'likes'
+                    }
+                },
+                {
                     $addFields: {
                         likes: {
                             $size: '$likes'
+                        },
+                        bookmarks: {
+                            $size: '$bookmarks'
+                        },
+                        isLiked: {
+                            $in: [user_id_obj, '$likes.user_id']
+                        },
+                        isBookmark: {
+                            $in: [user_id_obj, '$bookmarks.user_id']
                         },
                         comment_count: {
                             $size: {
@@ -548,10 +619,14 @@ class PostsService {
                 },
                 {
                     $project: {
-                        _id: 1,
-                        medias: 1,
-                        likes: 1,
-                        comment_count: 1
+                        posts_children: 0,
+                        user: {
+                            password: 0,
+                            email_verify_token: 0,
+                            forgot_password_token: 0,
+                            post_circle: 0,
+                            date_of_birth: 0
+                        }
                     }
                 },
                 {
