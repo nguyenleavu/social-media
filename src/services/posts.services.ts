@@ -61,7 +61,11 @@ class PostsService {
         returnDocument: 'after'
       }
     )
-    return data
+    const isLiked = await databaseServices.likes.findOne({
+      $and: [{ post_id: { $eq: new ObjectId(post_id) } }, { user_id: { $eq: new ObjectId(user_id) } }]
+    })
+
+    return { data, isLiked: !!isLiked }
   }
 
   async getPostChildren({
@@ -213,6 +217,11 @@ class PostsService {
         },
         {
           $limit: limit
+        },
+        {
+          $sort: {
+            created_at: -1
+          }
         }
       ])
       .toArray()

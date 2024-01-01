@@ -539,9 +539,9 @@ export const updateMeValidator = validate(
         isLength: {
           options: {
             min: 1,
-            max: 255
+            max: 2000
           },
-          errorMessage: USER_MESSAGES.BIO_MUST_BE_FROM_1_TO_255
+          errorMessage: USER_MESSAGES.BIO_MUST_BE_FROM_1_TO_2000
         },
         trim: true
       },

@@ -44,7 +44,7 @@ exports.USER_MESSAGES = {
     GET_MET_SUCCESS: 'Get me success',
     USER_NOT_VERIFIED: 'User not verified',
     BIO_MUST_BE_A_STRING: 'Bio must be a string',
-    BIO_MUST_BE_FROM_1_TO_255: 'Bio must be from 1 to 255',
+    BIO_MUST_BE_FROM_1_TO_2000: 'Bio must be from 1 to 2000',
     LOCATION_MUST_BE_A_STRING: 'Location must be a string',
     LOCATION_MUST_BE_FROM_1_TO_255: 'Location must be from 1 to 255',
     WEBSITE_MUST_BE_A_STRING: 'Website must be a string',

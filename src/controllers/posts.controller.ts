@@ -16,9 +16,10 @@ export const createPostController = async (req: Request<ParamsDictionary, any, P
 }
 
 export const getPostController = async (req: Request, res: Response) => {
-  const data = await postsService.increaseView(req.params.post_id, req.decode_authorization?.user_id)
+  const { data, isLiked } = await postsService.increaseView(req.params.post_id, req.decode_authorization?.user_id)
   const post = {
     ...req.post,
+    isLiked,
     guest_views: data?.guest_views,
     user_views: data?.user_views,
     updated_at: data?.updated_at

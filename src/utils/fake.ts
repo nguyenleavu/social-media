@@ -1,16 +1,16 @@
 import { PostAudience, PostType, UserVerifyStatus } from '@/constants/enums'
 import { PostReqBody } from '@/models/requests/Posts.requests'
 import { RegisterReqBody } from '@/models/requests/Users.requests'
+import Follower from '@/models/schemas/Follower.schema'
 import User from '@/models/schemas/User.schema'
 import databaseServices from '@/services/database.services'
+import postsService from '@/services/posts.services'
 import { faker } from '@faker-js/faker/locale/vi'
 import { ObjectId } from 'mongodb'
 import { hasPassword } from './crypto'
-import Follower from '@/models/schemas/Follower.schema'
-import postsService from '@/services/posts.services'
 
 const PASSWORD = '123456789aA@'
-const MY_ID = '658bc0fbd3fd9631e47b5796'
+const MY_ID = '658d3d804c5b60f93d799948'
 const USER_COUNT = 941
 
 const createRandomUser = () => {
@@ -143,6 +143,22 @@ const medias = [
   },
   {
     url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/f7b5c77519b93f5142734c301.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/a195679010d30f4a6569cce00.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/a195679010d30f4a6569cce01.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/a195679010d30f4a6569cce02.mp4',
+    type: 1
+  },
+  {
+    url: 'https://social-media-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/a195679010d30f4a6569cce03.mp4',
     type: 1
   },
   {
@@ -1169,6 +1185,22 @@ const createRandomPost = () => {
   return posts
 }
 
+const createRandomCommentPost = (ObjectId: ObjectId) => {
+  const posts: PostReqBody = {
+    type: PostType.Comment,
+    audience: PostAudience.Everyone,
+    content: `{"blocks":[{"key":"8vufd","text":"${faker.lorem.paragraph({
+      min: 2,
+      max: 7
+    })}","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`,
+    hashtags: [],
+    mentions: [],
+    medias: [],
+    parent_id: ObjectId.toString()
+  }
+  return posts
+}
+
 const users: RegisterReqBody[] = faker.helpers.multiple(createRandomUser, { count: USER_COUNT })
 
 const insertMultipleUsers = async (users: RegisterReqBody[]) => {
@@ -1188,7 +1220,8 @@ const insertMultipleUsers = async (users: RegisterReqBody[]) => {
           email: `${names[index].name}@gmail.com`,
           password: hasPassword(user.password),
           date_of_birth: new Date(user.date_of_birth),
-          verify: UserVerifyStatus.Verified
+          verify: UserVerifyStatus.Verified,
+          bio: `"{"blocks":[{"key":"fu3v2","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}"`
         })
       )
       return user_id
@@ -1218,7 +1251,7 @@ const followMultipleUsers = async (user_id: string, followed_user_ids: ObjectId[
 
 const insertMultiplePost = async (ids: ObjectId[]) => {
   let count = 0
-  const result = await Promise.all(
+  await Promise.all(
     ids.map(async (id, index) => {
       await Promise.all([
         postsService.createPost(id.toString(), createRandomPost()),
@@ -1228,7 +1261,6 @@ const insertMultiplePost = async (ids: ObjectId[]) => {
       console.log(`Create ${count} posts`)
     })
   )
-  return result
 }
 
 insertMultipleUsers(users).then((ids) => {

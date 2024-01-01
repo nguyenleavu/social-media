@@ -48,7 +48,10 @@ class PostsService {
         }, {
             returnDocument: 'after'
         });
-        return data;
+        const isLiked = await database_services_1.default.likes.findOne({
+            $and: [{ post_id: { $eq: new mongodb_1.ObjectId(post_id) } }, { user_id: { $eq: new mongodb_1.ObjectId(user_id) } }]
+        });
+        return { data, isLiked: !!isLiked };
     }
     async getPostChildren({ post_id, post_type, limit, page, user_id }) {
         const posts = await database_services_1.default.posts
@@ -187,6 +190,11 @@ class PostsService {
             },
             {
                 $limit: limit
+            },
+            {
+                $sort: {
+                    created_at: -1
+                }
             }
         ])
             .toArray();

@@ -16,9 +16,10 @@ const createPostController = async (req, res) => {
 };
 exports.createPostController = createPostController;
 const getPostController = async (req, res) => {
-    const data = await posts_services_1.default.increaseView(req.params.post_id, req.decode_authorization?.user_id);
+    const { data, isLiked } = await posts_services_1.default.increaseView(req.params.post_id, req.decode_authorization?.user_id);
     const post = {
         ...req.post,
+        isLiked,
         guest_views: data?.guest_views,
         user_views: data?.user_views,
         updated_at: data?.updated_at
